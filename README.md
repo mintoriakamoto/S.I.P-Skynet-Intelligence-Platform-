@@ -5,7 +5,7 @@
 # ◆ 👁️THE BIG BROTHER · V5.0 👁️◆
 <br/>
 
-<img width="3671" height="1024" alt="banner" src="https://github.com/user-attachments/assets/5ef6b20c-ec6c-4024-ad35-380a73f526b6" />
+<img width="3910" height="1088" alt="x" src="https://github.com/user-attachments/assets/94879543-dac9-40c0-ab1c-f0a583513ba1" />
 
 <br/>
 
