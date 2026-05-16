@@ -3,8 +3,6 @@
 <br/>
 
 # ◆ THE BIG BROTHER · V5.0 ◆
-### **GOD'S EYE PROTOCOL // QUANTUM OSINT SURVEILLANCE GRID**
-
 <br/>
 
 <img width="3671" height="1024" alt="banner" src="https://github.com/user-attachments/assets/5ef6b20c-ec6c-4024-ad35-380a73f526b6" />
@@ -159,7 +157,8 @@ uvicorn the_big_brother.gui.main:app --host 0.0.0.0 --port 8000
 
 <div align="center">
 
-<img width="1675" height="840" alt="V5 dashboard" src="https://github.com/x" />
+<img width="1675" height="840" alt="V5 dashboard" src="https://github.com/user-attachments/assets/548d4613-d53c-4d89-85ea-fb538b5bedff" />
+
 
 
 </div>
