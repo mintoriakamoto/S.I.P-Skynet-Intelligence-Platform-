@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE BIG BROTHER · V5.0 // GOD'S EYE PROTOCOL</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="3.css?v=7.0.0">
+</head>
+<body>
+
+<!-- ============================================================
+     BOOT OVERLAY
+     ============================================================ -->
+<div id="boot">
+    <div class="boot-logo">THE BIG BROTHER</div>
+    <div class="boot-bar"><div></div></div>
+    <div class="boot-lines" id="boot-lines"></div>
+</div>
+
+<!-- ============================================================
+     AMBIENT BACKDROP LAYERS
+     ============================================================ -->
+<canvas id="particle-canvas"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
+<div class="app-container">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-mark">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="bm-edge" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%"   stop-color="#ff0050"/>
+                            <stop offset="55%"  stop-color="#a259ff"/>
+                            <stop offset="100%" stop-color="#00f0ff"/>
+                        </linearGradient>
+                        <linearGradient id="bm-fill" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%"   stop-color="#ff0050" stop-opacity="0.95"/>
+                            <stop offset="100%" stop-color="#a259ff" stop-opacity="0.9"/>
+                        </linearGradient>
+                        <radialGradient id="bm-core" cx="0.5" cy="0.5" r="0.5">
+                            <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+                            <stop offset="60%"  stop-color="#00f0ff" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <!-- crosshair ticks -->
+                    <g stroke="url(#bm-edge)" stroke-width="1.6" stroke-linecap="round">
+                        <path d="M32 3 L32 9"/>
+                        <path d="M32 55 L32 61"/>
+                        <path d="M3 32 L9 32"/>
+                        <path d="M55 32 L61 32"/>
+                    </g>
+                    <!-- outer diamond -->
+                    <path d="M32 7 L57 32 L32 57 L7 32 Z"
+                          fill="none" stroke="url(#bm-edge)" stroke-width="1.8" stroke-linejoin="miter"/>
+                    <!-- inner diamond -->
+                    <path d="M32 18 L46 32 L32 46 L18 32 Z"
+                          fill="url(#bm-fill)" opacity="0.92"/>
+                    <!-- core glow -->
+                    <circle cx="32" cy="32" r="12" fill="url(#bm-core)" opacity="0.65"/>
+                    <!-- inner accent line -->
+                    <path d="M22 32 L42 32" stroke="#ffffff" stroke-width="0.8" opacity="0.55"/>
+                    <!-- center diamond pip -->
+                    <path d="M32 28 L36 32 L32 36 L28 32 Z" fill="#ffffff" opacity="0.95"/>
+                </svg>
+            </div>
+            <h1 class="glitch" data-text="BIG BROTHER">BIG BROTHER</h1>
+            <div class="subtitle">V5 · GOD'S EYE PROTOCOL</div>
+            <div class="status-strip">
+                <span class="status-dot">CORE</span>
+                <span class="status-dot">NEURAL</span>
+                <span class="status-dot">UPLINK</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav" id="main-nav">
+
+            <div class="nav-section-title">Synthesis</div>
+            <button class="tab-btn" onclick="switchTab('tab-analyst', 'AI ANALYST')">
+                <span>🤖</span> AI ANALYST <span class="new-badge">NEW</span>
+            </button>
+
+            <div class="nav-section-title">Identity</div>
+            <button class="tab-btn active" onclick="switchTab('tab-profiler', 'TARGET PROFILER')">
+                <span>🔍</span> PROFILER
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-phantom', 'PHANTOM IDENTITY')">
+                <span>👻</span> PHANTOM ID
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-breach', 'BREACH VAULT')">
+                <span>🔓</span> BREACH VAULT
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-footprint', 'DIGITAL FOOTPRINT')">
+                <span>👣</span> FOOTPRINT
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-mailtracer', 'MAIL TRACER')">
+                <span>📨</span> MAIL TRACER <span class="new-badge">NEW</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-codehunter', 'CODE HUNTER')">
+                <span>🐙</span> CODE HUNTER <span class="new-badge">NEW</span>
+            </button>
+
+            <div class="nav-section-title">Intel</div>
+            <button class="tab-btn" onclick="switchTab('tab-sigint', 'SIGINT SWEEP')">
+                <span>📡</span> SIGINT SWEEP
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-shadowmap', 'SHADOW MAP')">
+                <span>🗺️</span> SHADOW MAP
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-paste', 'PASTE DRAGNET')">
+                <span>📋</span> PASTE DRAGNET <span class="new-badge">NEW</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-darkwatch', 'DARK WEB WATCH')">
+                <span>🧅</span> DARK WEB
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-wayback', 'WAYBACK SPECTRE')">
+                <span>🕰️</span> WAYBACK <span class="new-badge">NEW</span>
+            </button>
+
+            <div class="nav-section-title">Infrastructure</div>
+            <button class="tab-btn" onclick="switchTab('tab-oracle', 'DOMAIN ORACLE')">
+                <span>🌐</span> DOMAIN ORACLE <span class="new-badge">NEW</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-network', 'NETWORK MAPPER')">
+                <span>🕸️</span> NET SCAN
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-ssl', 'SSL SENTINEL')">
+                <span>🔒</span> SSL
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-crypto', 'CRYPTO ANALYZER')">
+                <span>🪙</span> CRYPTO
+            </button>
+
+            <div class="nav-section-title">Media / Geo</div>
+            <button class="tab-btn" onclick="switchTab('tab-exif', 'EXIF X-RAY')">
+                <span>📸</span> EXIF
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-dorks', 'DORK STUDIO')">
+                <span>🛠️</span> DORKS
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-geoint', 'GEOINT SPY')">
+                <span>🛰️</span> GEOINT
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-flight', 'SKY RADAR')">
+                <span>✈️</span> SKY RADAR
+            </button>
+        </nav>
+
+        <button class="nav-premium-btn" onclick="switchTab('tab-premium', 'PREMIUM CATALOG')">
+            🔥 PREMIUM CATALOG
+        </button>
+    </aside>
+
+    <!-- ===== MAIN COLUMN ===== -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-title">
+                <div class="crosshair"></div>
+                <span id="active-module-title">TARGET PROFILER</span>
+            </div>
+            <div class="topbar-meta">
+                <span><span class="live-dot"></span><strong>LIVE</strong></span>
+                <span>SESSION <strong id="session-id">—</strong></span>
+                <span><strong id="clock">UTC 00:00:00</strong></span>
+            </div>
+        </header>
+
+        <div class="content-area" id="content-area">
+
+            <!-- ============================================================
+                 TAB: AI ANALYST (NEW)
+                 ============================================================ -->
+            <div id="tab-analyst" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">AI Analyst · Cross-Module Synthesis</div>
+                    <div class="dim mono" style="font-size:0.78rem; margin-bottom:14px;">
+                        Auto-detects target type (email · domain · IP · username), fans out to every relevant module in parallel, and produces a unified risk profile with a single threat score.
+                    </div>
+                    <div class="search-area">
+                        <input type="text" id="analyst-input" placeholder="ENTER TARGET (email, domain, ip, or @username)" onkeydown="if(event.key==='Enter') runAnalyst()">
+                        <select id="analyst-mode" class="dork-select" style="min-width:120px;">
+                            <option value="auto">AUTO</option>
+                            <option value="email">EMAIL</option>
+                            <option value="domain">DOMAIN</option>
+                            <option value="ip">IP</option>
+                            <option value="username">USERNAME</option>
+                        </select>
+                        <button onclick="runAnalyst()" class="glitch-btn hot">EXECUTE</button>
+                    </div>
+                    <div id="analyst-status"></div>
+                </div>
+
+                <div id="analyst-summary" class="hide"></div>
+                <div id="analyst-findings" class="hide"></div>
+                <div id="analyst-modules" class="hide"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: TARGET PROFILER
+                 ============================================================ -->
+            <div id="tab-profiler" class="tab-content active">
+                <div id="images-panel" class="hud-panel reveal hide">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="spread" style="margin-bottom:14px;">
+                        <div class="panel-title" style="margin:0;">Biometric Capture · Visual Intel</div>
+                        <span id="images-count" class="status-badge info">0 IMAGES</span>
+                    </div>
+                    <div class="dim mono" style="font-size:0.74rem; margin-bottom:14px;">Auto-pulled from DuckDuckGo · Bing · Google Images · click any thumb for reverse-image search across 4 engines</div>
+                    <div id="images-container" class="images-container"></div>
+                </div>
+
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Target Profiler</div>
+                    <div class="search-area">
+                        <input type="text" id="username" placeholder="ENTER TARGET IDENTIFIER..."
+                            onkeydown="if(event.key==='Enter') startScan()">
+                        <button onclick="startScan()" id="btn-scan" class="glitch-btn hot">INITIATE</button>
+                    </div>
+
+                    <div class="controls">
+                        <button id="btn-stop" class="ctrl-btn stop" onclick="stopScan()" disabled>[ X ] ABORT</button>
+                        <button id="btn-download" class="ctrl-btn download" onclick="downloadReport()" disabled>[ ↓ ] EXPORT CSV</button>
+
+                        <div class="dork-wrapper">
+                            <select id="dork-select" class="dork-select">
+                                <option value="linkedin">LINKEDIN</option>
+                                <option value="instagram">INSTAGRAM</option>
+                                <option value="twitter">TWITTER</option>
+                                <option value="facebook">FACEBOOK</option>
+                                <option value="tiktok">TIKTOK</option>
+                                <option value="pinterest">PINTEREST</option>
+                                <option value="github">GITHUB</option>
+                                <option value="gitlab">GITLAB</option>
+                                <option value="stackoverflow">STACKOVERFLOW</option>
+                                <option value="pastebin">PASTEBIN</option>
+                                <option value="reddit">REDDIT</option>
+                                <option value="pdf">FILETYPE: PDF</option>
+                                <option value="doc">FILETYPE: DOC</option>
+                                <option value="txt">FILETYPE: TXT</option>
+                                <option value="intext">INTEXT SCAN</option>
+                                <option value="intitle">INTITLE SCAN</option>
+                                <option value="inurl">INURL SCAN</option>
+                                <option value="password">BREACH CHECK</option>
+                                <option value="email">EMAIL CHECK</option>
+                                <option value="phone">PHONE CHECK</option>
+                            </select>
+                            <button class="dork-btn" onclick="executeDork()">DEPLOY ›</button>
+                        </div>
+                    </div>
+
+                    <div id="status">SYSTEM STANDBY.</div>
+                </div>
+
+                <div id="results" class="results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: PHANTOM ID
+                 ============================================================ -->
+            <div id="tab-phantom" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Phantom Identity</div>
+                    <div class="search-area">
+                        <input type="text" id="phantom-input" placeholder="ENTER TARGET USERNAME" onkeydown="if(event.key==='Enter') scanPhantom()">
+                        <button onclick="scanPhantom()" class="glitch-btn hot">HUNT</button>
+                    </div>
+                    <div class="score-shell" style="margin-top:14px;">
+                        <div class="score-meta">
+                            <span>EXPOSURE SCORE</span>
+                            <strong id="phantom-score-text">STANDBY</strong>
+                        </div>
+                        <div class="score-bar"><div id="phantom-score-bar" class="score-fill" style="width:0%;"></div></div>
+                    </div>
+                    <div id="phantom-status">WAITING FOR TARGET.</div>
+                </div>
+
+                <div id="phantom-results" class="results-grid" style="display:block;">
+                    <div id="phantom-meta" class="hide hud-panel" style="margin-bottom:18px;">
+                        <span class="bracket tl"></span><span class="bracket tr"></span>
+                        <span class="bracket bl"></span><span class="bracket br"></span>
+                        <div class="row" style="align-items:center;">
+                            <img id="phantom-avatar" src="" style="width:84px; height:84px; border-radius:50%; border:2px solid var(--cyan); box-shadow:0 0 22px rgba(0,240,255,0.5);">
+                            <div id="phantom-cats" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+                        </div>
+                    </div>
+                    <div id="phantom-grid" class="results"></div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: BREACH VAULT
+                 ============================================================ -->
+            <div id="tab-breach" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Breach Vault</div>
+                    <div class="search-area">
+                        <input type="text" id="breach-input" placeholder="ENTER EMAIL OR PASSWORD" onkeydown="if(event.key==='Enter') scanBreach()">
+                        <select id="breach-type" class="dork-select" style="min-width:160px;">
+                            <option value="email">EMAIL</option>
+                            <option value="password">PASSWORD (HASHED)</option>
+                        </select>
+                        <button onclick="scanBreach()" class="glitch-btn hot">AUDIT</button>
+                    </div>
+                    <div id="breach-status">READY TO CHECK LEAKS.</div>
+                </div>
+
+                <div id="breach-summary" style="margin-bottom:18px;"></div>
+                <div id="breach-results" class="results"></div>
+                <div id="paste-dump-results" style="margin-top:18px; display:grid; gap:10px;"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: FOOTPRINT
+                 ============================================================ -->
+            <div id="tab-footprint" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Digital Footprint</div>
+                    <div class="search-area">
+                        <input type="text" id="footprint-input" placeholder="ENTER EMAIL OR PHONE (e.g. +1415...)">
+                        <select id="footprint-type" class="dork-select" style="min-width:140px;">
+                            <option value="email">EMAIL</option>
+                            <option value="phone">PHONE</option>
+                        </select>
+                        <button onclick="scanFootprint()" class="glitch-btn">TRACK</button>
+                    </div>
+                    <div id="footprint-status">READY TO TRACK.</div>
+                </div>
+                <div id="footprint-results" class="results-grid" style="display:block;"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: MAIL TRACER (NEW)
+                 ============================================================ -->
+            <div id="tab-mailtracer" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Mail Tracer · Email Forensics</div>
+                    <div class="dim mono" style="font-size:0.76rem; margin-bottom:12px;">MX validity · SPF/DMARC posture · disposable/role detection · gravatar lookup · trust score</div>
+                    <div class="search-area">
+                        <input type="text" id="mail-input" placeholder="ENTER EMAIL (e.g. someone@example.com)" onkeydown="if(event.key==='Enter') scanMail()">
+                        <button onclick="scanMail()" class="glitch-btn">TRACE</button>
+                    </div>
+                    <div id="mail-status">AWAITING TARGET.</div>
+                </div>
+                <div id="mail-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: CODE HUNTER (NEW)
+                 ============================================================ -->
+            <div id="tab-codehunter" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Code Hunter · GitHub OSINT</div>
+                    <div class="dim mono" style="font-size:0.76rem; margin-bottom:12px;">Profile · repos · commit-email harvesting · language stats · activity heatmap</div>
+                    <div class="search-area">
+                        <input type="text" id="code-input" placeholder="ENTER GITHUB USERNAME (without @)" onkeydown="if(event.key==='Enter') scanCode()">
+                        <button onclick="scanCode()" class="glitch-btn">HUNT</button>
+                    </div>
+                    <div id="code-status">READY.</div>
+                </div>
+                <div id="code-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: SIGINT SWEEP
+                 ============================================================ -->
+            <div id="tab-sigint" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Sigint Sweep</div>
+                    <div class="search-area">
+                        <input type="text" id="sigint-input" placeholder="ENTER BRAND, PERSON, OR KEYWORD" onkeydown="if(event.key==='Enter') scanSigint()">
+                        <button onclick="scanSigint()" class="glitch-btn">SWEEP</button>
+                    </div>
+                    <div class="row" id="sigint-sentiment" style="margin-top:12px; padding:12px; background:rgba(0,0,0,0.35); border-radius:8px; gap:24px; justify-content:center;">
+                        <div class="h-green mono">▲ POSITIVE: <span id="sig-pos">0</span></div>
+                        <div class="h-amber mono">● NEUTRAL: <span id="sig-neu">0</span></div>
+                        <div class="h-red mono">▼ NEGATIVE: <span id="sig-neg">0</span></div>
+                    </div>
+                    <div id="sigint-status">AWAITING DIRECTIVES.</div>
+                </div>
+                <div id="sigint-results" style="display:flex; flex-direction:column; gap:12px;"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: SHADOW MAP
+                 ============================================================ -->
+            <div id="tab-shadowmap" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Shadow Map</div>
+                    <div class="search-area">
+                        <input type="text" id="shadow-input" placeholder="ENTER IP OR DOMAIN TO INVESTIGATE" onkeydown="if(event.key==='Enter') scanShadow()">
+                        <button onclick="scanShadow()" class="glitch-btn hot">TRACE</button>
+                    </div>
+                    <div id="shadow-status">REPUTATION ENGINE NOMINAL.</div>
+                </div>
+
+                <div id="shadow-dashboard" class="hide" style="grid-template-columns: 1fr 2fr; gap:16px;">
+                    <div class="result-card" style="text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div class="dim mono" style="margin-bottom:14px;">THREAT SCORE</div>
+                        <div id="shadow-score" style="font-size:4.5rem; font-weight:900; line-height:1; font-family:var(--font-display);">0</div>
+                        <div id="shadow-level" class="status-badge" style="margin-top:12px; font-size:0.8rem; padding:6px 14px;">CLEAN</div>
+                        <div id="shadow-factors" class="col" style="margin-top:18px; width:100%; text-align:left; font-size:0.78rem;"></div>
+                    </div>
+                    <div class="col">
+                        <div class="result-card" id="shadow-abuse"></div>
+                        <div class="result-card" id="shadow-vt"></div>
+                        <div class="result-card" id="shadow-geo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: PASTE DRAGNET (NEW)
+                 ============================================================ -->
+            <div id="tab-paste" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Paste Dragnet · Multi-Site Hunter</div>
+                    <div class="dim mono" style="font-size:0.76rem; margin-bottom:12px;">Pastebin · Ghostbin · Rentry · Paste.ee · 0bin · JustPaste · Hastebin · Ideone · DPaste — via DuckDuckGo dorks</div>
+                    <div class="search-area">
+                        <input type="text" id="paste-input" placeholder="ENTER QUERY (email · domain · keyword)" onkeydown="if(event.key==='Enter') scanPaste()">
+                        <button onclick="scanPaste()" class="glitch-btn hot">DRAGNET</button>
+                    </div>
+                    <div id="paste-status">READY TO HUNT.</div>
+                </div>
+                <div id="paste-summary"></div>
+                <div id="paste-results" class="results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: DARK WEB
+                 ============================================================ -->
+            <div id="tab-darkwatch" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Dark Web Watch</div>
+                    <div class="search-area">
+                        <input type="text" id="dark-input" placeholder="ENTER KEYWORD (e.g. leak, database)">
+                        <button onclick="scanDarkWeb()" class="glitch-btn hot">SEARCH ONION</button>
+                    </div>
+                    <div id="dark-status">CAUTION: ONION NETWORK GATEWAY.</div>
+                </div>
+                <div id="dark-results" class="results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: WAYBACK SPECTRE (NEW)
+                 ============================================================ -->
+            <div id="tab-wayback" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Wayback Spectre · Time-Machine Recon</div>
+                    <div class="dim mono" style="font-size:0.76rem; margin-bottom:12px;">Wayback Machine CDX timeline · year buckets · sensitive-path flagging (admin · .env · .git · backups)</div>
+                    <div class="search-area">
+                        <input type="text" id="wayback-input" placeholder="ENTER DOMAIN OR URL" onkeydown="if(event.key==='Enter') scanWayback()">
+                        <button onclick="scanWayback()" class="glitch-btn">RECALL</button>
+                    </div>
+                    <div id="wayback-status">READY.</div>
+                </div>
+                <div id="wayback-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: DOMAIN ORACLE (NEW)
+                 ============================================================ -->
+            <div id="tab-oracle" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Domain Oracle · Deep Intel</div>
+                    <div class="dim mono" style="font-size:0.76rem; margin-bottom:12px;">WHOIS (RDAP) · full DNS · SPF/DMARC/DKIM grade · HTTP security headers · TLS · crt.sh subs · reverse-IP</div>
+                    <div class="search-area">
+                        <input type="text" id="oracle-input" placeholder="ENTER DOMAIN (e.g. example.com)" onkeydown="if(event.key==='Enter') scanOracle()">
+                        <button onclick="scanOracle()" class="glitch-btn hot">DIVINE</button>
+                    </div>
+                    <div id="oracle-status">READY.</div>
+                </div>
+                <div id="oracle-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: NETWORK MAPPER
+                 ============================================================ -->
+            <div id="tab-network" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Network Mapper</div>
+                    <div class="search-area">
+                        <input type="text" id="network-input" placeholder="ENTER DOMAIN (e.g. example.com)">
+                        <button onclick="scanNetwork()" class="glitch-btn">MAP NETWORK</button>
+                    </div>
+                    <div id="network-status">READY TO SCAN.</div>
+                </div>
+                <div id="network-results" style="display:block; min-height:500px;">
+                    <div id="network-graph" style="width:100%; height:500px; border:1px solid var(--panel-edge); border-radius:var(--radius); background:#000; overflow:hidden;"></div>
+                    <div id="network-ports" style="margin-top:18px;"></div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: SSL SENTINEL
+                 ============================================================ -->
+            <div id="tab-ssl" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">SSL Sentinel</div>
+                    <div class="search-area">
+                        <input type="text" id="ssl-input" placeholder="ENTER DOMAIN (e.g. secure.com)">
+                        <button onclick="scanSSL()" class="glitch-btn">INSPECT SSL</button>
+                    </div>
+                    <div id="ssl-status">TLS HANDSHAKE PROTOCOL READY.</div>
+                </div>
+                <div id="ssl-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: CRYPTO
+                 ============================================================ -->
+            <div id="tab-crypto" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Crypto Analyzer</div>
+                    <div class="search-area">
+                        <input type="text" id="crypto-input" placeholder="ENTER WALLET ADDRESS">
+                        <select id="crypto-type" class="dork-select" style="min-width:140px;">
+                            <option value="btc">BITCOIN</option>
+                            <option value="eth">ETHEREUM</option>
+                        </select>
+                        <button onclick="scanCrypto()" class="glitch-btn">ANALYZE</button>
+                    </div>
+                    <div id="crypto-status">LEDGER CONNECTION ESTABLISHED.</div>
+                </div>
+                <div id="crypto-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: EXIF
+                 ============================================================ -->
+            <div id="tab-exif" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">EXIF X-Ray</div>
+                    <div class="search-area">
+                        <input type="text" id="exif-input" placeholder="ENTER IMAGE URL (http://...)">
+                        <span class="mono dim" style="align-self:center;">OR</span>
+                        <input type="file" id="exif-file" style="min-width:200px;">
+                    </div>
+                    <div class="row" style="margin-top:12px;">
+                        <button onclick="analyzeExif()" class="glitch-btn">EXTRACT (URL)</button>
+                        <button onclick="analyzeExifFile()" class="glitch-btn ok">EXTRACT (FILE)</button>
+                    </div>
+                    <div id="exif-status">WAITING FOR VISUAL DATA.</div>
+                </div>
+                <div id="exif-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: DORKS
+                 ============================================================ -->
+            <div id="tab-dorks" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Dork Studio</div>
+                    <div class="search-area">
+                        <input type="text" id="dork-target" placeholder="TARGET KEYWORD (e.g. Tesla)">
+                        <input type="text" id="dork-domain" placeholder="DOMAIN (Optional)">
+                        <button onclick="generateDorks()" class="glitch-btn">GENERATE</button>
+                    </div>
+                    <div id="dork-status">HACKING QUERIES READY.</div>
+                </div>
+                <div id="dork-results" class="results" style="grid-template-columns: 1fr;"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: GEOINT
+                 ============================================================ -->
+            <div id="tab-geoint" class="tab-content">
+                <div class="hud-panel reveal">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <div class="panel-title">Geoint Spy</div>
+                    <div class="search-area">
+                        <input type="text" id="geo-lat" placeholder="LATITUDE (e.g. 40.7128)">
+                        <input type="text" id="geo-lon" placeholder="LONGITUDE (e.g. -74.0060)">
+                        <button onclick="runGeoint()" class="glitch-btn ok">SAT RECON</button>
+                    </div>
+                    <div id="geo-status">SATELLITE UPLINK STANDBY.</div>
+                </div>
+                <div id="geo-results"></div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: SKY RADAR
+                 ============================================================ -->
+            <div id="tab-flight" class="tab-content" style="height: calc(100vh - 160px); min-height:600px;">
+                <div style="display:flex; flex-direction:column; height:100%;">
+                    <div class="hud-panel" style="margin-bottom:10px; flex-shrink:0;">
+                        <span class="bracket tl"></span><span class="bracket tr"></span>
+                        <span class="bracket bl"></span><span class="bracket br"></span>
+                        <div class="panel-title">Sky Radar</div>
+                        <div class="search-area" style="flex-wrap: wrap; gap:8px;">
+                            <select id="sky-country" class="dork-select" onchange="updateSkyRegion()" style="min-width:160px;">
+                                <option value="">SELECT REGION...</option>
+                                <option value="uk">UNITED KINGDOM</option>
+                                <option value="usa_east">USA (EAST)</option>
+                                <option value="usa_west">USA (WEST)</option>
+                                <option value="france">FRANCE</option>
+                                <option value="germany">GERMANY</option>
+                                <option value="russia">RUSSIA (MOSCOW)</option>
+                                <option value="china">CHINA (EAST)</option>
+                                <option value="japan">JAPAN</option>
+                                <option value="dubai">UAE (DUBAI)</option>
+                            </select>
+                            <input type="text" id="sky-lat" placeholder="LAT" style="max-width:120px;">
+                            <input type="text" id="sky-lon" placeholder="LON" style="max-width:120px;">
+                            <input type="text" id="sky-rad" value="100" placeholder="RAD (KM)" style="max-width:120px;">
+                            <button onclick="scanSky()" class="glitch-btn">RADAR SCAN</button>
+                            <button onclick="if(navigator.geolocation) navigator.geolocation.getCurrentPosition(p=>{document.getElementById('sky-lat').value=p.coords.latitude; document.getElementById('sky-lon').value=p.coords.longitude;})" class="ctrl-btn">📍 MY LOC</button>
+                        </div>
+                        <div id="sky-status">OPENSKY NETWORK LINKED.</div>
+                    </div>
+
+                    <div style="display:flex; gap:14px; flex:1; min-height:0;">
+                        <div id="sky-map" style="flex:3; height:100%; background:var(--bg-1); border:1px solid var(--panel-edge); border-radius:var(--radius); overflow:hidden;"></div>
+                        <div style="flex:1; height:100%; overflow-y:auto; border:1px solid var(--panel-edge); border-radius:var(--radius); background:var(--panel); padding:14px;">
+                            <div class="panel-title" style="margin-bottom:10px;">LIVE TRAFFIC</div>
+                            <div id="sky-results">
+                                <div class="dim mono" style="text-align:center;">NO DATA FEED</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 TAB: PREMIUM
+                 ============================================================ -->
+            <div id="tab-premium" class="tab-content">
+                <div class="hud-panel reveal" style="text-align:center;">
+                    <span class="bracket tl"></span><span class="bracket tr"></span>
+                    <span class="bracket bl"></span><span class="bracket br"></span>
+                    <h2 class="panel-title" style="justify-content:center; font-size:1.1rem;">PREMIUM PROJECT CATALOG</h2>
+                    <div class="dim mono" style="font-size:0.84rem;">UNLOCK ADVANCED CAPABILITIES WITH THESE EXCLUSIVE MODULES.</div>
+                </div>
+
+                <div class="results" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                    <div class="result-card">
+                        <div class="spread" style="margin-bottom:10px;">
+                            <h3 class="card-title">TheBigBrother God-EYE</h3>
+                            <span class="status-badge critical">PREMIUM</span>
+                        </div>
+                        <div class="dim" style="font-size:0.86rem; margin-bottom:18px;">The ultimate evolution of OSINT operations. Direct access to proprietary servers and global data APIs for unprecedented deep-level intelligence.</div>
+                        <button class="glitch-btn hot" style="width:100%;" onclick="window.open('https://t.me/hisoka0morow', '_blank')">GET IT</button>
+                    </div>
+                    <div class="result-card">
+                        <div class="spread" style="margin-bottom:10px;">
+                            <h3 class="card-title">X GodMode</h3>
+                            <span class="status-badge info">AUTOMATION</span>
+                        </div>
+                        <div class="dim" style="font-size:0.86rem; margin-bottom:18px;">Deploy fully automated farms across the X ecosystem — auto-publish, RT, like, comment, engineer sentiment.</div>
+                        <button class="glitch-btn" style="width:100%;" onclick="window.open('https://t.me/hisoka0morow', '_blank')">GET IT</button>
+                    </div>
+                    <div class="result-card">
+                        <div class="spread" style="margin-bottom:10px;">
+                            <h3 class="card-title">Amplifior</h3>
+                            <span class="status-badge medium">TIKTOK BOT</span>
+                        </div>
+                        <div class="dim" style="font-size:0.86rem; margin-bottom:18px;">Hands-free TikTok empire builder. Autonomous download → edit → publish loops for explosive organic growth.</div>
+                        <button class="glitch-btn ok" style="width:100%;" onclick="window.open('https://t.me/hisoka0morow', '_blank')">GET IT</button>
+                    </div>
+                    <div class="result-card">
+                        <div class="spread" style="margin-bottom:10px;">
+                            <h3 class="card-title">Psychopath</h3>
+                            <span class="status-badge low">PHISHING</span>
+                        </div>
+                        <div class="dim" style="font-size:0.86rem; margin-bottom:18px;">Definitive engineered phishing platform — 100+ targets, SMTP bridging, conversational AI bots.</div>
+                        <button class="glitch-btn ok" style="width:100%;" onclick="window.open('https://t.me/hisoka0morow', '_blank')">GET IT</button>
+                    </div>
+                    <div class="result-card">
+                        <div class="spread" style="margin-bottom:10px;">
+                            <h3 class="card-title">Custom Project</h3>
+                            <span class="status-badge critical">DEVELOPMENT</span>
+                        </div>
+                        <div class="dim" style="font-size:0.86rem; margin-bottom:18px;">Arsenal of 200+ operational tools. If a capability doesn't exist, we engineer it. Nothing is impossible.</div>
+                        <button class="glitch-btn hot" style="width:100%;" onclick="window.open('https://t.me/hisoka0morow', '_blank')">GET IT</button>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /content-area -->
+    </main>
+</div><!-- /app-container -->
+
+<!-- ============================================================
+     DEEP SEARCH MODAL
+     ============================================================ -->
+<div id="deepModal" class="deepModal">
+    <div class="spread" style="margin-bottom:14px;">
+        <h3>DEEP VISUAL INTEL</h3>
+        <button class="ctrl-btn stop" onclick="closeDeepModal()">[ X ] CLOSE</button>
+    </div>
+    <div class="row" style="margin-bottom:14px; align-items:center;">
+        <img id="deep-target-img" src="" style="width:84px; height:84px; object-fit:cover; border-radius:var(--radius); border:1px solid var(--cyan); box-shadow:0 0 22px rgba(0,240,255,0.4);">
+        <div class="target-scan">⚲ SCANNING TARGET ACROSS VISUAL SEARCH ENGINES...</div>
+    </div>
+    <div id="deep-status" class="mono dim" style="margin-bottom:14px;">READY</div>
+    <div class="deep-grid">
+        <div class="deep-col"><h4>GOOGLE IMAGES</h4><div id="google-results"></div></div>
+        <div class="deep-col"><h4>BING VISUAL</h4><div id="bing-results"></div></div>
+        <div class="deep-col"><h4>YANDEX VISION</h4><div id="yandex-results"></div></div>
+        <div class="deep-col"><h4>TINEYE TRACKER</h4><div id="tineye-results"></div></div>
+    </div>
+</div>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ---------- boot sequence ---------- */
+(function() {
+    const lines = [
+        '[OK] core kernel · online',
+        '[OK] neural mesh · linked',
+        '[OK] crypt engines · primed',
+        '[OK] phantom net · ready',
+        '[OK] sigint relay · open',
+        '[!!] uplink · god\'s eye protocol engaged'
+    ];
+    const host = document.getElementById('boot-lines');
+    lines.forEach((line, i) => {
+        const span = document.createElement('span');
+        span.textContent = line;
+        if (line.includes('[!!]')) span.classList.add('err');
+        else span.classList.add('ok');
+        host.appendChild(span);
+        setTimeout(() => span.classList.add('show'), 180 + i * 200);
+    });
+    setTimeout(() => document.getElementById('boot').classList.add('done'), 1700);
+})();
+
+/* ---------- clock + session ---------- */
+function pad(n) { return String(n).padStart(2, '0'); }
+function tickClock() {
+    const d = new Date();
+    document.getElementById('clock').textContent =
+        `UTC ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
+}
+setInterval(tickClock, 1000); tickClock();
+document.getElementById('session-id').textContent =
+    '#' + Math.random().toString(36).slice(2, 8).toUpperCase();
+
+/* ---------- particle canvas ---------- */
+(function() {
+    const c = document.getElementById('particle-canvas');
+    const ctx = c.getContext('2d');
+    let w, h, particles = [];
+    const COUNT = 80;
+
+    function resize() {
+        w = c.width = innerWidth;
+        h = c.height = innerHeight;
+    }
+    resize();
+    addEventListener('resize', resize);
+
+    for (let i = 0; i < COUNT; i++) {
+        particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25,
+            r: Math.random() * 1.6 + 0.4,
+            hue: Math.random() < 0.5 ? '255, 0, 80' : '0, 240, 255'
+        });
+    }
+
+    function frame() {
+        ctx.clearRect(0, 0, w, h);
+        for (const p of particles) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > w) p.vx *= -1;
+            if (p.y < 0 || p.y > h) p.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${p.hue}, 0.6)`;
+            ctx.fill();
+        }
+        // connect close particles
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const a = particles[i], b = particles[j];
+                const dx = a.x - b.x, dy = a.y - b.y;
+                const d = Math.sqrt(dx * dx + dy * dy);
+                if (d < 120) {
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.strokeStyle = `rgba(255, 0, 80, ${0.08 * (1 - d / 120)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(frame);
+    }
+    frame();
+})();
+
+/* ---------- tilt + cursor-glow on cards ---------- */
+function bindTilt(scope) {
+    (scope || document).querySelectorAll('.result-card').forEach(card => {
+        if (card.dataset.tiltBound) return;
+        card.dataset.tiltBound = '1';
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            const x = e.clientX - r.left, y = e.clientY - r.top;
+            const rx = ((y / r.height) - 0.5) * -6;
+            const ry = ((x / r.width) - 0.5) * 6;
+            card.style.transform = `translateY(-4px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+            card.style.setProperty('--mx', x + 'px');
+            card.style.setProperty('--my', y + 'px');
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+}
+
+/* ---------- scroll reveal ---------- */
+const revealObserver = new IntersectionObserver(entries => {
+    for (const e of entries) {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObserver.unobserve(e.target);
+        }
+    }
+}, { threshold: 0.05 });
+function bindReveal(scope) {
+    (scope || document).querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+bindReveal();
+
+/* re-bind after each tab switch and after any innerHTML update on results */
+function refreshFX(scope) { bindTilt(scope); bindReveal(scope); }
+
+/* ---------- tab switching ---------- */
+function switchTab(tabId, title) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add('active');
+
+    if (event && event.currentTarget) event.currentTarget.classList.add('active');
+    if (title) {
+        const tEl = document.getElementById('active-module-title');
+        tEl.textContent = '';
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i >= title.length) { clearInterval(interval); return; }
+            tEl.textContent += title[i++];
+        }, 22);
+    }
+    refreshFX(target);
+}
+
+/* ============================================================
+   STATE + HELPERS
+   ============================================================ */
+let jobId = null, pollInterval = null, currentUsername = "";
+
+function renderDict(obj, opts = {}) {
+    if (!obj || typeof obj !== 'object') return '';
+    return Object.entries(obj).map(([k, v]) => {
+        if (v === null || v === undefined || v === '') return '';
+        if (Array.isArray(v)) v = v.join(', ') || '—';
+        if (typeof v === 'object') v = JSON.stringify(v);
+        return `<div style="display:flex; gap:8px; padding:3px 0; font-size:0.82rem;"><span class="dim mono" style="min-width:120px;">${k}:</span><span>${v}</span></div>`;
+    }).join('');
+}
+
+function gradeBadgeClass(g) {
+    if (g === 'A') return 'verified';
+    if (g === 'B') return 'low';
+    if (g === 'C') return 'medium';
+    if (g === 'D') return 'high';
+    return 'critical';
+}
+
+function fillScore(barEl, scoreEl, value, invert = false) {
+    barEl.style.width = value + '%';
+    scoreEl.textContent = value + '%';
+    let c = 'var(--green)';
+    if (invert) {
+        if (value > 70) c = 'var(--red)';
+        else if (value > 40) c = 'var(--amber)';
+    } else {
+        if (value < 30) c = 'var(--red)';
+        else if (value < 60) c = 'var(--amber)';
+    }
+    barEl.style.background = c;
+    barEl.style.color = c;
+}
+
+/* ============================================================
+   PROFILER
+   ============================================================ */
+async function startScan() {
+    const username = document.getElementById('username').value.trim();
+    if (!username) return;
+    currentUsername = username;
+
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('images-panel').classList.remove('hide');
+    document.getElementById('images-count').textContent = 'SEARCHING...';
+    document.getElementById('images-count').className = 'status-badge check';
+    document.getElementById('images-container').dataset.last = '';
+    document.getElementById('images-container').innerHTML = `
+        <div class="mono h-cyan" style="padding:30px; text-align:center; width:100%; letter-spacing:2px;">
+            <div style="font-size:0.9rem; margin-bottom:10px;">⚲ ACQUIRING BIOMETRIC DATA</div>
+            <div class="dim" style="font-size:0.74rem;">querying ddg · bing · google images for "${username}"</div>
+        </div>`;
+    document.getElementById('status').textContent = 'INITIALIZING NEURAL LINK...';
+    document.getElementById('btn-scan').disabled = true;
+    document.getElementById('btn-stop').disabled = false;
+    document.getElementById('btn-download').disabled = true;
+    document.getElementById('username').disabled = true;
+
+    try {
+        const res = await fetch('/api/scan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        const data = await res.json();
+        jobId = data.job_id;
+        if (pollInterval) clearInterval(pollInterval);
+        pollInterval = setInterval(poll, 1500);
+    } catch (e) {
+        console.error(e);
+        alert('SYSTEM FAILURE: CONNECTION REFUSED');
+        resetState();
+    }
+}
+
+async function stopScan() {
+    if (!jobId) return;
+    try {
+        await fetch(`/api/stop/${jobId}`, { method: 'POST' });
+        document.getElementById('status').textContent = 'ABORTING SEQUENCE...';
+    } catch (e) { console.error(e); }
+}
+
+function downloadReport() {
+    if (!jobId) return;
+    window.location.href = `/api/download/${jobId}`;
+}
+
+function executeDork() {
+    const u = (document.getElementById('username').value.trim() || currentUsername).trim();
+    if (!u) return alert('ENTER TARGET IDENTIFIER FIRST');
+    const type = document.getElementById('dork-select').value;
+    const map = {
+        linkedin: `site:linkedin.com "${u}"`, instagram: `site:instagram.com "${u}"`,
+        twitter: `site:twitter.com "${u}"`,  facebook: `site:facebook.com "${u}"`,
+        tiktok: `site:tiktok.com "${u}"`,    pinterest: `site:pinterest.com "${u}"`,
+        github: `site:github.com "${u}"`,    gitlab: `site:gitlab.com "${u}"`,
+        stackoverflow: `site:stackoverflow.com "${u}"`,
+        pastebin: `site:pastebin.com "${u}"`, reddit: `site:reddit.com "${u}"`,
+        pdf: `filetype:pdf "${u}"`, doc: `filetype:doc "${u}"`, txt: `filetype:txt "${u}"`,
+        intext: `intext:"${u}"`, intitle: `intitle:"${u}"`, inurl: `inurl:"${u}"`,
+        password: `"${u}" "password"`, email: `"${u}" email`, phone: `"${u}" phone`
+    };
+    const q = map[type];
+    if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
+}
+
+function downloadImage(url) {
+    const a = document.createElement('a');
+    a.href = url; a.download = `target_${currentUsername}.jpg`; a.target = '_blank';
+    a.click();
+}
+
+async function poll() {
+    if (!jobId) return;
+    try {
+        const res = await fetch(`/api/results/${jobId}`);
+        const data = await res.json();
+        renderImages(data.images || []);
+        renderResults(data.results);
+        const statusMap = {
+            running: 'SCANNING GLOBAL NETWORKS...',
+            validating: 'VERIFYING TARGET VULNERABILITIES [HEADLESS]...',
+            stopped: 'SEQUENCE ABORTED BY USER.',
+            completed: 'TARGET ACQUISITION COMPLETE.',
+            error: 'CRITICAL SYSTEM FAILURE.'
+        };
+        document.getElementById('status').textContent = statusMap[data.status] || data.status;
+        if (['completed', 'error', 'stopped'].includes(data.status)) {
+            clearInterval(pollInterval);
+            if (!data.images || !data.images.length) setImagesEmpty(data.image_diag);
+            resetState(true);
+        }
+    } catch (e) { console.error(e); }
+}
+
+function renderImages(images) {
+    const container = document.getElementById('images-container');
+    const countEl = document.getElementById('images-count');
+    if (!images || !images.length) return;
+    // Only re-render when the set changes
+    if (container.dataset.last === String(images.length)) return;
+    container.dataset.last = String(images.length);
+
+    countEl.textContent = `${images.length} IMAGE${images.length === 1 ? '' : 'S'} FOUND`;
+    countEl.className = 'status-badge verified';
+
+    container.innerHTML = images.map((src, i) => `
+        <div class="image-wrapper" onclick="triggerDeepSearch('${src}', this)" style="animation: tabEnter 480ms ${i * 80}ms both;">
+            <img src="${src}" class="captured-image" onerror="this.parentElement.style.display='none'">
+            <div style="position:absolute; top:8px; left:8px; padding:3px 8px; background:rgba(0,0,0,0.7); border:1px solid var(--cyan); border-radius:var(--radius-pill); font-family:var(--font-mono); font-size:0.62rem; letter-spacing:1px; color:var(--cyan);">#${String(i + 1).padStart(2, '0')}</div>
+            <button class="btn-deep">⚲ DEEP SEARCH</button>
+            <button class="dl-btn" onclick="event.stopPropagation(); downloadImage('${src}')">↓</button>
+        </div>
+    `).join('');
+}
+
+function setImagesEmpty(diag) {
+    const container = document.getElementById('images-container');
+    const countEl = document.getElementById('images-count');
+    if (container.children.length > 0 && !container.querySelector('.h-cyan')) return;
+    countEl.textContent = 'NO IMAGES';
+    countEl.className = 'status-badge clean';
+
+    const d = (diag || '').toLowerCase();
+    let hint = '';
+    if (d.includes('chromium-missing') || d.includes('browser-missing')) {
+        hint = `<div class="h-red mono" style="font-size:0.74rem; margin-top:6px;">⚠ Playwright Chromium is missing inside the container.<br>Fix: rebuild with <span class="h-cyan">docker-compose build --no-cache</span> (the V5 Dockerfile re-runs <span class="h-cyan">playwright install chromium</span>).</div>`;
+    } else if (d.includes('rate-limited')) {
+        hint = `<div class="h-amber mono" style="font-size:0.74rem; margin-top:6px;">⚠ DuckDuckGo rate-limited this IP. Wait a minute and retry, or run from a different IP.</div>`;
+    } else if (d.includes('timeout')) {
+        hint = `<div class="h-amber mono" style="font-size:0.74rem; margin-top:6px;">⚠ Network timeout reaching image engines.</div>`;
+    } else if (d) {
+        hint = `<div class="dim mono" style="font-size:0.7rem; margin-top:6px;">diag: ${diag}</div>`;
+    }
+    container.innerHTML = `
+        <div style="padding:20px; text-align:center; width:100%;">
+            <div class="dim mono" style="font-size:0.82rem;">[ NO PUBLIC IMAGES FOUND FOR THIS TARGET ]</div>
+            ${hint}
+        </div>`;
+}
+
+function renderResults(results) {
+    const container = document.getElementById('results');
+    const rank = s => s === 'Verified' ? 0 : s === 'Checking...' ? 1 : s === 'Pending' ? 2 : 3;
+    const sorted = [...results].sort((a, b) => rank(a.validation) - rank(b.validation));
+    container.innerHTML = sorted.map(r => `
+        <div class="result-card">
+            <div class="spread" style="margin-bottom:8px;">
+                <h3 class="card-title">${r.site}</h3>
+                ${renderBadge(r)}
+            </div>
+            <a href="${r.url}" target="_blank" class="card-url">${r.url}</a>
+            ${r.page_title ? `<div class="dim mono" style="font-size:0.74rem;">TITLE: ${r.page_title}</div>` : ''}
+            ${r.reason ? `<div class="h-red mono" style="font-size:0.74rem;">ERR: ${r.reason}</div>` : ''}
+        </div>
+    `).join('');
+    refreshFX(container);
+}
+
+function renderBadge(res) {
+    if (res.validation === 'Pending') return '<span class="status-badge">PENDING</span>';
+    if (res.validation === 'Checking...') return '<span class="status-badge check">CHECKING</span>';
+    if (res.validation === 'Verified') return '<span class="status-badge verified">VERIFIED</span>';
+    if (res.validation === 'False Positive') return '<span class="status-badge false">FALSE+</span>';
+    return '';
+}
+
+function resetState(finished = false) {
+    document.getElementById('btn-scan').disabled = false;
+    document.getElementById('btn-stop').disabled = true;
+    document.getElementById('btn-download').disabled = !finished;
+    document.getElementById('username').disabled = false;
+}
+
+/* ============================================================
+   DEEP SEARCH MODAL
+   ============================================================ */
+async function triggerDeepSearch(url, wrapper) {
+    document.getElementById('deep-target-img').src = url;
+    const modal = document.getElementById('deepModal');
+    modal.classList.add('active');
+    document.getElementById('deep-status').textContent = 'DEPLOYING MULTI-VECTOR VISUAL SEARCH...';
+    ['google-results', 'bing-results', 'yandex-results', 'tineye-results'].forEach(id => {
+        document.getElementById(id).innerHTML = '<div class="h-green mono" style="animation: pulse 1.2s ease-in-out infinite;">[ ESTABLISHING UPLINK... ]</div>';
+    });
+
+    try {
+        const res = await fetch('/api/deep-search', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_url: url })
+        });
+        const data = await res.json();
+        document.getElementById('deep-status').textContent = 'TARGET VISUAL MATCHES ACQUIRED.';
+        renderDeepResults('google-results', data.google);
+        renderDeepResults('bing-results', data.bing);
+        renderDeepResults('yandex-results', data.yandex);
+        renderDeepResults('tineye-results', data.tineye);
+    } catch (e) {
+        console.error(e);
+        document.getElementById('deep-status').textContent = 'VISUAL SEARCH FAILURE.';
+    }
+}
+
+function renderDeepResults(divId, images) {
+    const c = document.getElementById(divId);
+    if (!images || images.length === 0) {
+        c.innerHTML = '<div class="dim">NO MATCHES FOUND</div>';
+        return;
+    }
+    c.innerHTML = images.map(src => `<img src="${src}" onclick="window.open('${src}')">`).join('');
+}
+
+function closeDeepModal() {
+    document.getElementById('deepModal').classList.remove('active');
+}
+
+/* ============================================================
+   PHANTOM ID
+   ============================================================ */
+async function scanPhantom() {
+    const username = document.getElementById('phantom-input').value.trim();
+    if (!username) return;
+    document.getElementById('phantom-status').textContent = 'HUNTING USERNAME ACROSS 200+ PLATFORMS...';
+    document.getElementById('phantom-grid').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px; width:100%;">SCANNING NETWORKS...</div>';
+    document.getElementById('phantom-meta').classList.add('hide');
+    try {
+        const res = await fetch('/api/phantom', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        const data = await res.json();
+
+        const bar = document.getElementById('phantom-score-bar');
+        const text = document.getElementById('phantom-score-text');
+        fillScore(bar, text, data.risk_score || 0, true);
+
+        document.getElementById('phantom-avatar').src = data.gravatar || '';
+        document.getElementById('phantom-meta').classList.remove('hide');
+        document.getElementById('phantom-cats').innerHTML =
+            Object.entries(data.categories || {}).map(([c, n]) => `<span class="tag">${c.toUpperCase()}: ${n}</span>`).join('');
+
+        const grid = document.getElementById('phantom-grid');
+        if (!data.profiles || !data.profiles.length) {
+            grid.innerHTML = '<div class="dim mono" style="text-align:center; padding:30px;">NO PROFILES FOUND.</div>';
+        } else {
+            grid.innerHTML = data.profiles.map(p => `
+                <div class="result-card" style="cursor:pointer;" onclick="window.open('${p.url}')">
+                    <h3 class="card-title">${p.platform}</h3>
+                    <div class="dim mono" style="font-size:0.74rem;">STATUS ${p.status} · ${p.cat || 'general'}</div>
+                </div>
+            `).join('');
+        }
+        document.getElementById('phantom-status').textContent =
+            `FOUND PRESENCE ON ${data.found} / ${data.total_checked} PLATFORMS.`;
+        refreshFX(grid);
+    } catch (e) {
+        console.error(e);
+        document.getElementById('phantom-status').textContent = 'PHANTOM IDENTIFICATION FAILED.';
+    }
+}
+
+/* ============================================================
+   BREACH VAULT
+   ============================================================ */
+async function scanBreach() {
+    const query = document.getElementById('breach-input').value.trim();
+    const type = document.getElementById('breach-type').value;
+    if (!query) return;
+    document.getElementById('breach-status').textContent = 'QUERYING DARK VAULTS...';
+    document.getElementById('breach-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">ANALYZING LEAKS...</div>';
+    document.getElementById('breach-summary').innerHTML = '';
+    document.getElementById('paste-dump-results').innerHTML = '';
+
+    try {
+        const res = await fetch('/api/breach', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, type })
+        });
+        const data = await res.json();
+
+        if (data.type === 'password') {
+            if (data.pwned) {
+                document.getElementById('breach-results').innerHTML = `
+                <div class="result-card" style="border-color:var(--red); text-align:center;">
+                    <h3 class="card-title h-red">PASSWORD COMPROMISED</h3>
+                    <div class="mono" style="font-size:1.2rem;">SEEN ${data.count} TIMES</div>
+                    <div class="dim mono" style="font-size:0.78rem; margin-top:8px;">DO NOT USE THIS PASSWORD</div>
+                </div>`;
+                document.getElementById('breach-status').textContent = 'WARNING: HIGH SEVERITY.';
+            } else {
+                document.getElementById('breach-results').innerHTML = `
+                <div class="result-card" style="border-color:var(--green); text-align:center;">
+                    <h3 class="card-title h-green">PASSWORD SAFE</h3>
+                    <div class="mono">NO MATCHES IN KNOWN DATABASES.</div>
+                </div>`;
+                document.getElementById('breach-status').textContent = 'NO KNOWN EXPOSURE.';
+            }
+            refreshFX(document.getElementById('breach-results'));
+            return;
+        }
+
+        document.getElementById('breach-summary').innerHTML = `
+            <div class="result-card" style="display:flex; gap:24px; justify-content:center; text-align:center;">
+                <div><div style="font-size:2rem; font-family:var(--font-display);" class="h-red">${data.breach_count}</div><div class="dim mono" style="font-size:0.7rem;">DATABASES</div></div>
+                <div><div style="font-size:2rem; font-family:var(--font-display);" class="h-amber">${data.paste_count}</div><div class="dim mono" style="font-size:0.7rem;">PASTES</div></div>
+                <div><div style="font-size:2rem; font-family:var(--font-display);" class="h-cyan">${(data.total_records_exposed||0).toLocaleString()}</div><div class="dim mono" style="font-size:0.7rem;">RECORDS</div></div>
+            </div>`;
+
+        let html = "";
+        (data.breaches || []).forEach(b => {
+            if (b._note) { html += `<div class="dim mono" style="text-align:center;">${b._note}</div>`; return; }
+            const sev = (b.severity || 'LOW').toLowerCase();
+            html += `
+            <div class="result-card">
+                <div class="spread" style="margin-bottom:8px;">
+                    <h3 class="card-title">${b.name}</h3>
+                    <span class="status-badge ${sev}">${b.severity}</span>
+                </div>
+                <div class="row" style="gap:14px;">
+                    ${b.logo ? `<img src="${b.logo}" style="width:48px; height:48px; object-fit:contain; border-radius:6px;" onerror="this.style.display='none'">` : ''}
+                    <div style="flex:1;">
+                        <div class="dim mono" style="font-size:0.74rem; margin-bottom:6px;">${b.date} · ${b.domain || 'unknown'}</div>
+                        <div style="font-size:0.85rem; margin-bottom:8px;">${b.description}</div>
+                        <div class="row" style="gap:4px;">${(b.data_classes || []).map(d => `<span class="tag hot">${d}</span>`).join('')}</div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        if (!data.breaches || !data.breaches.length) {
+            html = '<div class="result-card" style="border-color:var(--green); text-align:center;"><h3 class="card-title h-green">CLEAN REPUTATION</h3><div>NO BREACHES DETECTED.</div></div>';
+        }
+        document.getElementById('breach-results').innerHTML = html;
+
+        if (data.paste_dumps && data.paste_dumps.length) {
+            const pd = data.paste_dumps.map(p => `
+                <div class="result-card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong class="h-amber">Pastebin ID: ${p.id}</strong>
+                        <div class="dim mono" style="font-size:0.74rem;">Indexed: ${new Date(p.date * 1000).toISOString().split('T')[0]}</div>
+                    </div>
+                    <button class="dork-btn" onclick="window.open('${p.url}')">VIEW CACHE ›</button>
+                </div>
+            `).join('');
+            document.getElementById('paste-dump-results').innerHTML = pd;
+        }
+        document.getElementById('breach-status').textContent = 'AUDIT COMPLETE.';
+        refreshFX(document.getElementById('breach-results'));
+    } catch (e) {
+        console.error(e);
+        document.getElementById('breach-status').textContent = 'VAULT CONNECTION TERMINATED.';
+    }
+}
+
+/* ============================================================
+   FOOTPRINT
+   ============================================================ */
+async function scanFootprint() {
+    const query = document.getElementById('footprint-input').value.trim();
+    const type = document.getElementById('footprint-type').value;
+    if (!query) return;
+    document.getElementById('footprint-status').textContent = 'SCANNING DIGITAL TRACE...';
+    document.getElementById('footprint-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:30px;">ACCESSING DATABASES...</div>';
+    try {
+        const res = await fetch('/api/footprint', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, type })
+        });
+        const data = await res.json();
+        if (data.error) {
+            document.getElementById('footprint-results').innerHTML = `<div class="result-card" style="border-color:var(--red);">${data.error}</div>`;
+            document.getElementById('footprint-status').textContent = 'ERROR.';
+            return;
+        }
+        if (type === 'phone') {
+            const p = data;
+            document.getElementById('footprint-results').innerHTML = `
+                <div class="result-card">
+                    <h3 class="card-title h-green">PHONE INTELLIGENCE</h3>
+                    ${renderDict({
+                        'VALID NUMBER': p.valid,
+                        'FORMAT': p.number,
+                        'COUNTRY': p.country,
+                        'CARRIER': p.carrier,
+                        'LINE TYPE': p.line_type,
+                        'TIMEZONES': (p.timezones || []).join(', ')
+                    })}
+                </div>`;
+            document.getElementById('footprint-status').textContent = 'PHONE TRACE COMPLETE.';
+        } else {
+            let html = '';
+            if (data.found_on && data.found_on.length) {
+                html += `<div class="result-card"><h3 class="card-title h-green">DIGITAL FOOTPRINT DETECTED</h3>
+                    <div class="results" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:8px; margin-top:10px;">
+                    ${data.found_on.map(s => `<div class="tag ok" style="text-align:center; padding:8px;">${s}</div>`).join('')}
+                    </div></div>`;
+            } else {
+                html += `<div class="result-card" style="text-align:center;"><h3 class="card-title dim">NO PUBLIC TRACE</h3><div class="dim">TARGET EMAIL APPEARS CLEAN.</div></div>`;
+            }
+            html += `<div class="result-card" style="margin-top:12px; border-color:${data.valid_mx ? 'var(--green)' : 'var(--red)'};">
+                <h3 class="card-title">MX RECORDS</h3>
+                <div class="mono" style="font-size:1.05rem;">${data.valid_mx ? 'VALID MAIL SERVER' : 'INVALID / UNREACHABLE'}</div>
+                <div class="dim mono" style="font-size:0.78rem;">${(data.mx_records || []).length} SERVERS</div>
+            </div>`;
+            document.getElementById('footprint-results').innerHTML = html;
+            document.getElementById('footprint-status').textContent =
+                (data.found_on || []).length ? `EMAIL FOUND ON ${data.found_on.length} PLATFORMS.` : 'NO PUBLIC TRACE.';
+        }
+        refreshFX(document.getElementById('footprint-results'));
+    } catch (e) {
+        document.getElementById('footprint-status').textContent = 'ERROR EXECUTING TRACE.';
+    }
+}
+
+/* ============================================================
+   NETWORK MAPPER
+   ============================================================ */
+async function scanNetwork() {
+    const domain = document.getElementById('network-input').value.trim();
+    if (!domain) return;
+    document.getElementById('network-status').textContent = 'MAPPING TOPOLOGY...';
+    document.getElementById('network-graph').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:100px;">ESTABLISHING CONNECTIONS...</div>';
+    document.getElementById('network-ports').innerHTML = '';
+    try {
+        const res = await fetch('/api/network/scan', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ domain })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('network-status').textContent = 'ERROR: ' + data.error; return; }
+        if (data.map_html) {
+            const blob = new Blob([data.map_html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            document.getElementById('network-graph').innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;"></iframe>`;
+        }
+        let intel = '<div class="results" style="grid-template-columns: 1fr 1fr 1fr; gap:14px;">';
+        intel += `<div class="result-card"><h3 class="card-title">OPEN PORTS</h3>${
+            (data.ports || []).length
+                ? data.ports.map(p => `<div class="row" style="font-family:var(--font-mono); font-size:0.84rem;"><span class="h-red mono">${p.port}</span><span>${p.service}</span></div>`).join('')
+                : '<div class="dim">NO OPEN PORTS DETECTED</div>'
+        }</div>`;
+        intel += `<div class="result-card"><h3 class="card-title">GEO / WHOIS</h3>${
+            renderDict({
+                LOC: data.geoip && data.geoip.country ? `${data.geoip.country} (${data.geoip.countryCode})` : null,
+                ISP: data.geoip && data.geoip.isp,
+                ORG: data.geoip && data.geoip.org,
+                REG: data.whois && data.whois.registrar,
+                DATE: data.whois && data.whois.creation_date
+            })
+        }</div>`;
+        intel += `<div class="result-card"><h3 class="card-title">DNS RECORDS</h3>${
+            renderDict({
+                MX: (data.dns && data.dns.MX || []).join(', ') || null,
+                NS: (data.dns && data.dns.NS || []).join(', ') || null,
+                A:  (data.dns && data.dns.A  || []).join(', ') || null,
+                TXT: (data.dns && data.dns.TXT && data.dns.TXT.length) ? `${data.dns.TXT.length} records` : null
+            })
+        }</div></div>`;
+        document.getElementById('network-ports').innerHTML = intel;
+        document.getElementById('network-status').textContent = 'SCAN COMPLETE.';
+        refreshFX(document.getElementById('network-ports'));
+    } catch (e) {
+        document.getElementById('network-status').textContent = 'NETWORK ERROR.';
+    }
+}
+
+/* ============================================================
+   DARK WEB
+   ============================================================ */
+async function scanDarkWeb() {
+    const query = document.getElementById('dark-input').value.trim();
+    if (!query) return;
+    document.getElementById('dark-status').textContent = 'ROUTING THROUGH TOR GATEWAYS...';
+    document.getElementById('dark-results').innerHTML = '<div class="mono h-amber" style="text-align:center;">DECYPHERING...</div>';
+    try {
+        const res = await fetch('/api/dark/search', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('dark-results').innerHTML = `<div class="h-red">ERROR: ${data.error}</div>`; return; }
+        if (!data.results.length) { document.getElementById('dark-results').innerHTML = '<div class="dim mono" style="text-align:center;">NO HIDDEN SERVICES FOUND.</div>'; return; }
+        document.getElementById('dark-results').innerHTML = data.results.map(item => {
+            const isRansom = (item.title || '').includes('Ransomware');
+            return `
+            <div class="result-card">
+                <div class="spread" style="margin-bottom:8px;">
+                    <h3 class="card-title h-red">${item.title}</h3>
+                    <span class="status-badge ${isRansom ? 'critical' : 'high'}">${isRansom ? 'LEAK' : 'ONION'}</span>
+                </div>
+                <div class="dim mono" style="font-size:0.74rem;">${item.date || ''}</div>
+                <div style="font-size:0.86rem; margin:8px 0;">${item.snippet || ''}</div>
+                <a href="${item.link}" target="_blank" class="card-url">${item.link}</a>
+            </div>`;
+        }).join('');
+        document.getElementById('dark-status').textContent = `FOUND ${data.count} ONION SERVICES.`;
+        refreshFX(document.getElementById('dark-results'));
+    } catch (e) { document.getElementById('dark-status').textContent = 'CONNECTION FAILURE.'; }
+}
+
+/* ============================================================
+   CRYPTO
+   ============================================================ */
+async function scanCrypto() {
+    const address = document.getElementById('crypto-input').value.trim();
+    const coin = document.getElementById('crypto-type').value;
+    if (!address) return;
+    document.getElementById('crypto-status').textContent = 'SYNCING WITH DISTRIBUTED LEDGER...';
+    document.getElementById('crypto-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">FETCHING BLOCKS...</div>';
+    try {
+        const res = await fetch('/api/crypto/analyze', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address, coin })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('crypto-status').textContent = 'ERROR: ' + data.error; document.getElementById('crypto-results').innerHTML = ''; return; }
+        document.getElementById('crypto-results').innerHTML = `
+        <div class="result-card" style="max-width:760px; margin:0 auto;">
+            <div class="spread" style="margin-bottom:14px;">
+                <h3 class="card-title h-amber">${data.coin.toUpperCase()} WALLET</h3>
+                <span class="status-badge verified">ACTIVE</span>
+            </div>
+            <div class="results" style="grid-template-columns: 1fr 1fr; gap:14px;">
+                <div><div class="dim mono" style="font-size:0.74rem;">BALANCE</div><div style="font-size:2rem; font-family:var(--font-display);">${data.balance}</div></div>
+                <div><div class="dim mono" style="font-size:0.74rem;">TOTAL RECEIVED</div><div style="font-size:2rem; font-family:var(--font-display);">${data.total_received}</div></div>
+                <div><div class="dim mono" style="font-size:0.74rem;">TRANSACTIONS</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.tx_count}</div></div>
+                <div><div class="dim mono" style="font-size:0.74rem;">LAST ACTIVITY</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.last_seen}</div></div>
+            </div>
+            <div class="dim mono" style="margin-top:14px; word-break:break-all; font-size:0.78rem;">ADDR: ${data.address}</div>
+        </div>`;
+        document.getElementById('crypto-status').textContent = `ANALYSIS COMPLETE: ${data.coin.toUpperCase()}`;
+        refreshFX(document.getElementById('crypto-results'));
+    } catch (e) { document.getElementById('crypto-status').textContent = 'LEDGER SYNC FAILED.'; }
+}
+
+/* ============================================================
+   SSL SENTINEL
+   ============================================================ */
+async function scanSSL() {
+    const domain = document.getElementById('ssl-input').value.trim();
+    if (!domain) return;
+    document.getElementById('ssl-status').textContent = 'INITIATING SSL HANDSHAKE...';
+    document.getElementById('ssl-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">DECODING CERTIFICATE CHAIN...</div>';
+    try {
+        const res = await fetch('/api/ssl/scan', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ domain })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('ssl-status').textContent = 'SSL FAIL: ' + data.error; document.getElementById('ssl-results').innerHTML = ''; return; }
+        document.getElementById('ssl-results').innerHTML = `
+        <div class="result-card">
+            <div class="spread" style="margin-bottom:12px;">
+                <h3 class="card-title h-cyan">${data.domain}</h3>
+                <span class="status-badge ${data.expired ? 'critical' : 'verified'}">${data.expired ? 'EXPIRED' : 'VALID'}</span>
+            </div>
+            <div class="results" style="grid-template-columns: 1fr 1fr; gap:14px;">
+                <div>
+                    <h4 class="h-cyan mono" style="margin:0 0 8px;">ISSUED BY</h4>
+                    ${renderDict(data.issuer)}
+                    <div class="dim mono" style="font-size:0.74rem; margin-top:10px;">VALIDITY</div>
+                    <div class="mono" style="font-size:0.84rem;">${data.not_before} → ${data.not_after}</div>
+                </div>
+                <div>
+                    <h4 class="h-cyan mono" style="margin:0 0 8px;">ISSUED TO</h4>
+                    ${renderDict(data.subject)}
+                </div>
+            </div>
+            <div style="margin-top:14px;">
+                <h4 class="h-cyan mono" style="margin:0 0 8px;">SUBDOMAINS (SANs) [${(data.sans || []).length}]</h4>
+                <div>${(data.sans || []).map(s => `<span class="tag">${s}</span>`).join('')}</div>
+            </div>
+        </div>`;
+        document.getElementById('ssl-status').textContent = 'CERTIFICATE VERIFIED.';
+        refreshFX(document.getElementById('ssl-results'));
+    } catch (e) { document.getElementById('ssl-status').textContent = 'HANDSHAKE FAILED.'; }
+}
+
+/* ============================================================
+   EXIF
+   ============================================================ */
+async function analyzeExif() {
+    const url = document.getElementById('exif-input').value.trim();
+    if (!url) return;
+    document.getElementById('exif-status').textContent = 'DOWNLOADING RAW BYTES...';
+    document.getElementById('exif-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">EXTRACTING METADATA LAYERS...</div>';
+    try {
+        const res = await fetch('/api/tools/exif', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        renderExif(await res.json());
+    } catch (e) { document.getElementById('exif-status').textContent = 'ANALYSIS ERROR.'; }
+}
+
+async function analyzeExifFile() {
+    const fileInput = document.getElementById('exif-file');
+    if (!fileInput.files.length) return;
+    document.getElementById('exif-status').textContent = 'UPLOADING BITSTREAM...';
+    document.getElementById('exif-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">EXTRACTING...</div>';
+    const fd = new FormData(); fd.append('file', fileInput.files[0]);
+    try {
+        const res = await fetch('/api/tools/exif/upload', { method: 'POST', body: fd });
+        renderExif(await res.json());
+    } catch (e) { document.getElementById('exif-status').textContent = 'UPLOAD FAILED.'; }
+}
+
+function renderExif(data) {
+    if (data.error) { document.getElementById('exif-status').textContent = 'EXTRACT FAIL: ' + data.error; document.getElementById('exif-results').innerHTML = ''; return; }
+    document.getElementById('exif-status').textContent = 'METADATA REVEALED.';
+    const gpsBlock = data.gps && Object.keys(data.gps).length
+        ? `<h4 class="h-red mono" style="margin-top:14px;">GEOLOCATION DATA</h4>${renderDict(data.gps)}`
+        : `<div class="dim mono" style="margin-top:14px;">[NO GPS DATA EMBEDDED]</div>`;
+    document.getElementById('exif-results').innerHTML = `
+    <div class="result-card">
+        <div class="spread" style="margin-bottom:10px;">
+            <h3 class="card-title">IMAGE METADATA</h3>
+            <span class="status-badge info">EXIF</span>
+        </div>
+        <h4 class="h-cyan mono" style="margin:0 0 8px;">BASIC INFO</h4>
+        ${renderDict(data.basic)}
+        ${gpsBlock}
+    </div>`;
+    refreshFX(document.getElementById('exif-results'));
+}
+
+/* ============================================================
+   DORKS
+   ============================================================ */
+async function generateDorks() {
+    const target = document.getElementById('dork-target').value.trim();
+    const domain = document.getElementById('dork-domain').value.trim();
+    if (!target) return;
+    try {
+        const res = await fetch('/api/tools/dork', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ target, domain })
+        });
+        const data = await res.json();
+        const sections = [
+            { key: 'google', title: 'GOOGLE (EXTREME)', color: 'var(--cyan)', baseUrl: 'https://www.google.com/search?q=' },
+            { key: 'shodan', title: 'SHODAN (INFRA)', color: 'var(--amber)', baseUrl: 'https://www.shodan.io/search?query=' },
+            { key: 'github', title: 'GITHUB (LEAKS)', color: 'var(--violet)', baseUrl: 'https://github.com/search?type=Code&q=' }
+        ];
+        let html = '';
+        for (const s of sections) {
+            if (!data[s.key] || !data[s.key].length) continue;
+            html += `<h3 class="panel-title" style="margin-top:14px; color:${s.color};">${s.title}</h3>`;
+            html += data[s.key].map(d => `
+            <div class="result-card">
+                <h3 class="card-title">${d.title}</h3>
+                <div class="mono" style="background:rgba(0,0,0,0.5); padding:10px; border-radius:6px; margin:8px 0; word-break:break-all; font-size:0.78rem; color:var(--cyan);">${d.query}</div>
+                <button class="dork-btn" onclick="window.open('${s.baseUrl}${encodeURIComponent(d.query)}')">OPEN ${s.title.split(' ')[0]} ›</button>
+            </div>`).join('');
+        }
+        document.getElementById('dork-results').innerHTML = html;
+        document.getElementById('dork-status').textContent = 'ATTACK VECTORS GENERATED.';
+        refreshFX(document.getElementById('dork-results'));
+    } catch (e) { console.error(e); }
+}
+
+/* ============================================================
+   GEOINT
+   ============================================================ */
+async function runGeoint() {
+    const lat = document.getElementById('geo-lat').value.trim();
+    const lon = document.getElementById('geo-lon').value.trim();
+    if (!lat || !lon) return;
+    document.getElementById('geo-status').textContent = 'TRIANGULATING POSITION...';
+    document.getElementById('geo-results').innerHTML = '<div class="mono h-green" style="text-align:center; padding:40px;">ACQUIRING SATELLITE LOCK...</div>';
+    try {
+        const res = await fetch('/api/tools/geoint', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lat, lon })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('geo-status').textContent = data.error; document.getElementById('geo-results').innerHTML = ''; return; }
+        const links = Object.entries(data.links || {}).map(([k, url]) => `
+            <div class="result-card">
+                <h3 class="card-title h-green">${k}</h3>
+                <button class="dork-btn" style="background:rgba(0,255,140,0.15); color:var(--green); border-color:var(--green);" onclick="window.open('${url}')">LAUNCH VIEW ›</button>
+            </div>`).join('');
+        document.getElementById('geo-results').innerHTML = `<div class="results" style="grid-template-columns:1fr 1fr; gap:12px;">${links}</div>`;
+        document.getElementById('geo-status').textContent = `TARGET ACQUIRED: ${data.coords}`;
+        refreshFX(document.getElementById('geo-results'));
+    } catch (e) { document.getElementById('geo-status').textContent = 'SATELLITE LINK FAILED.'; }
+}
+
+/* ============================================================
+   SKY RADAR
+   ============================================================ */
+let flightMap = null;
+async function scanSky() {
+    const lat = document.getElementById('sky-lat').value.trim();
+    const lon = document.getElementById('sky-lon').value.trim();
+    const rad = document.getElementById('sky-rad').value.trim();
+    if (!lat || !lon) return;
+    document.getElementById('sky-status').textContent = 'SCANNING AIRSPACE...';
+    document.getElementById('sky-results').innerHTML = '<div class="mono h-cyan" style="text-align:center;">READING TRANSPONDERS...</div>';
+    if (!flightMap) {
+        flightMap = L.map('sky-map').setView([lat, lon], 7);
+        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; OSM &copy; CartoDB', subdomains: 'abcd', maxZoom: 19
+        }).addTo(flightMap);
+    } else {
+        flightMap.setView([lat, lon], 7);
+        flightMap.eachLayer(layer => { if (layer instanceof L.Marker) flightMap.removeLayer(layer); });
+    }
+    L.marker([lat, lon]).addTo(flightMap).bindPopup('TARGET LOCATION').openPopup();
+
+    try {
+        const res = await fetch('/api/tools/flight', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lat: parseFloat(lat), lon: parseFloat(lon), radius: parseFloat(rad) })
+        });
+        const data = await res.json();
+        if (data.error || data.message) {
+            document.getElementById('sky-status').textContent = 'SECTOR CLEAR or ERROR.';
+            document.getElementById('sky-results').innerHTML = `<div class="dim mono" style="text-align:center;">${data.error || data.message}</div>`;
+            return;
+        }
+        let listHtml = '';
+        data.flights.forEach(f => {
+            if (f.lat && f.lon) {
+                const ico = `<div style="color:var(--cyan); font-size:20px; transform: rotate(${f.true_track || 0}deg); text-shadow:0 0 5px var(--cyan);">✈</div>`;
+                const divIcon = L.divIcon({ html: ico, className: 'plane-icon', iconSize: [24, 24], popupAnchor: [0, -10] });
+                L.marker([f.lat, f.lon], { icon: divIcon }).addTo(flightMap)
+                    .bindPopup(`<strong style="color:var(--cyan)">${f.callsign || 'UNKNOWN'}</strong><br>${f.country}<br>Alt: ${f.alt}m | Vel: ${f.velocity}m/s`);
+            }
+            listHtml += `
+            <div class="result-card" style="cursor:pointer; margin-bottom:8px;" onclick="focusMap(${f.lat}, ${f.lon}, '${f.callsign || ''}')">
+                <div class="spread" style="margin-bottom:6px;">
+                    <h3 class="card-title h-cyan">${f.callsign || 'UNK'}</h3>
+                    <span class="tag">${(f.country || '').substring(0, 3).toUpperCase()}</span>
+                </div>
+                <div class="row mono" style="font-size:0.78rem; justify-content:space-between;">
+                    <span class="dim">ALT: ${f.alt}m</span>
+                    <span class="dim">VEL: ${f.velocity}m/s</span>
+                </div>
+            </div>`;
+        });
+        document.getElementById('sky-results').innerHTML = listHtml || '<div class="dim mono" style="text-align:center;">NO TARGETS IN RANGE</div>';
+        document.getElementById('sky-status').textContent = `TRACKING ${data.count} AIRCRAFT.`;
+    } catch (e) { document.getElementById('sky-status').textContent = 'RADAR MALFUNCTION.'; }
+}
+
+function focusMap(lat, lon, callsign) {
+    if (flightMap) flightMap.setView([lat, lon], 11);
+}
+
+function updateSkyRegion() {
+    const r = {
+        uk: { lat: 51.5074, lon: -0.1278, rad: 300 },
+        usa_east: { lat: 40.7128, lon: -74.0060, rad: 500 },
+        usa_west: { lat: 34.0522, lon: -118.2437, rad: 500 },
+        france: { lat: 48.8566, lon: 2.3522, rad: 300 },
+        germany: { lat: 52.5200, lon: 13.4050, rad: 300 },
+        russia: { lat: 55.7558, lon: 37.6173, rad: 400 },
+        china: { lat: 31.2304, lon: 121.4737, rad: 500 },
+        japan: { lat: 35.6762, lon: 139.6503, rad: 300 },
+        dubai: { lat: 25.2048, lon: 55.2708, rad: 200 }
+    };
+    const sel = document.getElementById('sky-country').value;
+    if (r[sel]) {
+        document.getElementById('sky-lat').value = r[sel].lat;
+        document.getElementById('sky-lon').value = r[sel].lon;
+        document.getElementById('sky-rad').value = r[sel].rad;
+    }
+}
+
+/* ============================================================
+   SIGINT SWEEP
+   ============================================================ */
+async function scanSigint() {
+    const query = document.getElementById('sigint-input').value.trim();
+    if (!query) return;
+    document.getElementById('sigint-status').textContent = 'INTERCEPTING TRANSMISSIONS...';
+    document.getElementById('sigint-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">ANALYZING CHATTER...</div>';
+    try {
+        const res = await fetch('/api/sigint', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+        document.getElementById('sig-pos').textContent = data.sentiment_summary.POSITIVE;
+        document.getElementById('sig-neu').textContent = data.sentiment_summary.NEUTRAL;
+        document.getElementById('sig-neg').textContent = data.sentiment_summary.NEGATIVE;
+        let html = '';
+        data.feed.forEach(item => {
+            const sentClass = item.sentiment === 'POSITIVE' ? 'verified' : item.sentiment === 'NEGATIVE' ? 'critical' : 'medium';
+            html += `
+            <div class="result-card" style="cursor:pointer;" onclick="window.open('${item.url}')">
+                <div class="spread" style="margin-bottom:8px;">
+                    <span class="tag">[${item.source.toUpperCase()}] ${item.outlet || item.subreddit || ''}</span>
+                    <span class="dim mono" style="font-size:0.74rem;">${item.date || ''}</span>
+                </div>
+                <h3 class="card-title" style="font-family:var(--font-ui); font-weight:600;">${item.title}</h3>
+                <div class="dim" style="font-size:0.86rem; margin:8px 0;">${item.snippet || ''}</div>
+                <div class="row" style="gap:10px; margin-top:6px;">
+                    <span class="status-badge ${sentClass}">${item.sentiment}</span>
+                    ${item.score ? `<span class="dim mono" style="font-size:0.74rem;">SCORE: ${item.score}</span>` : ''}
+                </div>
+            </div>`;
+        });
+        document.getElementById('sigint-results').innerHTML = html || '<div class="dim mono" style="text-align:center;">NO RECENT INTEL CAPTURED.</div>';
+        document.getElementById('sigint-status').textContent = `GATHERED ${data.total} INTELLIGENCE PACKETS.`;
+        refreshFX(document.getElementById('sigint-results'));
+    } catch (e) { document.getElementById('sigint-status').textContent = 'INTERCEPTION FAILURE.'; }
+}
+
+/* ============================================================
+   SHADOW MAP
+   ============================================================ */
+async function scanShadow() {
+    const target = document.getElementById('shadow-input').value.trim();
+    if (!target) return;
+    document.getElementById('shadow-status').textContent = 'TRACING SHADOW INFRASTRUCTURE...';
+    document.getElementById('shadow-dashboard').classList.add('hide');
+    try {
+        const res = await fetch('/api/shadowmap', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ target })
+        });
+        const data = await res.json();
+        const d = document.getElementById('shadow-dashboard');
+        d.classList.remove('hide');
+        d.style.display = 'grid';
+
+        document.getElementById('shadow-score').textContent = data.threat_score;
+        document.getElementById('shadow-level').textContent = data.threat_level;
+        document.getElementById('shadow-level').className = 'status-badge ' + (
+            data.threat_level === 'CRITICAL' ? 'critical' :
+            data.threat_level === 'HIGH' ? 'high' :
+            data.threat_level === 'MEDIUM' ? 'medium' :
+            data.threat_level === 'LOW' ? 'low' : 'clean'
+        );
+
+        document.getElementById('shadow-factors').innerHTML = (data.threat_factors || [])
+            .map(f => `<div class="result-card" style="padding:8px 12px; border-color:var(--red);">⚠ ${f}</div>`)
+            .join('') || '<div class="dim mono">NO ACTIVE THREATS REPORTED.</div>';
+
+        const abuse = data.abuseipdb;
+        document.getElementById('shadow-abuse').innerHTML = `<h3 class="card-title h-amber">ABUSE IPDB</h3>${
+            abuse && abuse.available ? renderDict({
+                'CONFIDENCE': abuse.abuse_score + '%',
+                'TOTAL REPORTS': abuse.total_reports,
+                'ISP': abuse.isp || 'N/A',
+                'USAGE': abuse.usage_type || 'N/A'
+            }) : '<div class="dim">[NO DATA OR API KEY MISSING]</div>'
+        }`;
+        const vt = data.virustotal;
+        document.getElementById('shadow-vt').innerHTML = `<h3 class="card-title h-green">VIRUSTOTAL</h3>${
+            vt && vt.available ? renderDict({
+                MALICIOUS: vt.malicious, SUSPICIOUS: vt.suspicious,
+                REPUTATION: vt.reputation, 'TOTAL ENGINES': vt.total_engines
+            }) : '<div class="dim">[NO DATA OR API KEY MISSING]</div>'
+        }`;
+        const geo = data.geo || data.ipinfo;
+        document.getElementById('shadow-geo').innerHTML = `<h3 class="card-title h-cyan">TELEMETRY</h3>${
+            geo && Object.keys(geo).length ? renderDict({
+                IP: geo.ip, HOSTNAME: geo.hostname || 'None', CITY: geo.city,
+                COUNTRY: geo.country, ORGANIZATION: geo.org
+            }) : '<div class="dim">[UNABLE TO RESOLVE LOCATION]</div>'
+        }`;
+        document.getElementById('shadow-status').textContent = 'TRACE COMPLETE.';
+        refreshFX(d);
+    } catch (e) { document.getElementById('shadow-status').textContent = 'TRACE ABORTED.'; }
+}
+
+/* ============================================================
+   ──── NEW V5 MODULES ─────────────────────────────────────────
+   ============================================================ */
+
+/* ---------- DOMAIN ORACLE ---------- */
+async function scanOracle() {
+    const domain = document.getElementById('oracle-input').value.trim();
+    if (!domain) return;
+    document.getElementById('oracle-status').textContent = 'INVOKING THE ORACLE...';
+    document.getElementById('oracle-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">EXTRACTING DOMAIN INTELLIGENCE...</div>';
+    try {
+        const res = await fetch('/api/oracle', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ domain })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('oracle-status').textContent = data.error; document.getElementById('oracle-results').innerHTML = ''; return; }
+
+        const es = data.email_security || {};
+        const http = data.http_security || {};
+        const tls = data.tls || {};
+        const rdap = data.rdap || {};
+
+        const score = data.score || 0;
+        const scoreLevel = score >= 80 ? 'verified' : score >= 60 ? 'low' : score >= 40 ? 'medium' : score >= 20 ? 'high' : 'critical';
+
+        let html = `
+        <div class="result-card">
+            <div class="spread" style="margin-bottom:12px;">
+                <h3 class="card-title h-cyan">${data.domain} · ${data.ip}</h3>
+                <span class="status-badge ${scoreLevel}">HYGIENE ${score}/100</span>
+            </div>
+            <div class="score-shell" style="margin-bottom:12px;">
+                <div class="score-meta"><span>SECURITY POSTURE</span><strong>${score}/100</strong></div>
+                <div class="score-bar"><div class="score-fill" style="width:${score}%; background:var(--grad-ok);"></div></div>
+            </div>
+        </div>
+
+        <div class="results" style="grid-template-columns: 1fr 1fr; gap:14px;">
+            <div class="result-card">
+                <h3 class="card-title">EMAIL SECURITY</h3>
+                <div class="row" style="gap:6px; margin-bottom:8px;">
+                    <span class="status-badge ${gradeBadgeClass(es.spf && es.spf.grade)}">SPF · ${es.spf && es.spf.grade || 'F'}</span>
+                    <span class="status-badge ${gradeBadgeClass(es.dmarc && es.dmarc.grade)}">DMARC · ${es.dmarc && es.dmarc.grade || 'F'}</span>
+                    <span class="status-badge ${gradeBadgeClass(es.dkim && es.dkim.grade)}">DKIM · ${es.dkim && es.dkim.grade || 'F'}</span>
+                </div>
+                ${es.spf && es.spf.present ? `<div class="dim mono" style="font-size:0.74rem;">SPF policy: ${es.spf.policy}</div>` : '<div class="h-red mono" style="font-size:0.74rem;">No SPF — domain is spoofable</div>'}
+                ${es.dmarc && es.dmarc.present ? `<div class="dim mono" style="font-size:0.74rem;">DMARC policy: ${es.dmarc.policy}</div>` : '<div class="h-red mono" style="font-size:0.74rem;">No DMARC — no enforcement</div>'}
+                ${es.dkim && es.dkim.present ? `<div class="dim mono" style="font-size:0.74rem;">DKIM selectors: ${es.dkim.selectors_found.join(', ')}</div>` : '<div class="dim mono" style="font-size:0.74rem;">No DKIM selectors auto-discovered</div>'}
+            </div>
+            <div class="result-card">
+                <h3 class="card-title">HTTP SECURITY HEADERS</h3>
+                <div class="row" style="gap:6px; margin-bottom:8px;">
+                    <span class="status-badge ${gradeBadgeClass(http.grade)}">GRADE · ${http.grade || 'F'}</span>
+                    <span class="tag">${http.https_reachable ? 'HTTPS OK' : 'NO HTTPS'}</span>
+                </div>
+                <div class="dim mono" style="font-size:0.74rem; margin-bottom:6px;">Server: ${http.server || '—'} · Powered: ${http.powered_by || '—'}</div>
+                <div>${(http.missing || []).map(h => `<span class="tag hot">missing: ${h}</span>`).join('') || '<span class="tag ok">all headers present</span>'}</div>
+            </div>
+            <div class="result-card">
+                <h3 class="card-title">REGISTRATION</h3>
+                ${renderDict({
+                    REGISTRAR: rdap.registrar,
+                    CREATED: rdap.created,
+                    EXPIRES: rdap.expires,
+                    UPDATED: rdap.updated,
+                    STATUS: (rdap.status || []).join(', ') || '—'
+                })}
+            </div>
+            <div class="result-card">
+                <h3 class="card-title">TLS</h3>
+                ${tls.error ? `<div class="h-red mono">${tls.error}</div>` : renderDict({
+                    VERSION: tls.tls_version, CIPHER: tls.cipher,
+                    NOT_BEFORE: tls.not_before, NOT_AFTER: tls.not_after,
+                    ISSUER_CN: tls.issuer && tls.issuer.commonName,
+                    SUBJECT_CN: tls.subject && tls.subject.commonName
+                })}
+            </div>
+        </div>
+
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">DNS RECORDS</h3>
+            ${Object.entries(data.dns || {}).map(([k, v]) =>
+                v && v.length ? `<div style="margin-bottom:6px;"><span class="tag">${k}</span> <span class="mono" style="font-size:0.78rem;">${v.join(', ').slice(0, 600)}</span></div>` : ''
+            ).join('')}
+        </div>
+
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">SUBDOMAINS (crt.sh) · ${(data.subdomains || []).length}</h3>
+            <div style="max-height:200px; overflow-y:auto;">
+                ${(data.subdomains || []).slice(0, 200).map(s => `<span class="tag">${s}</span>`).join('') || '<div class="dim">none discovered</div>'}
+            </div>
+        </div>
+
+        ${data.neighbors && data.neighbors.length ? `
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">REVERSE-IP NEIGHBORS · ${data.neighbors.length}</h3>
+            <div style="max-height:200px; overflow-y:auto;">
+                ${data.neighbors.slice(0, 50).map(n => `<span class="tag">${n}</span>`).join('')}
+            </div>
+        </div>` : ''}
+        `;
+        document.getElementById('oracle-results').innerHTML = html;
+        document.getElementById('oracle-status').textContent = 'ORACLE COMPLETE.';
+        refreshFX(document.getElementById('oracle-results'));
+    } catch (e) {
+        console.error(e);
+        document.getElementById('oracle-status').textContent = 'ORACLE CHANNEL CLOSED.';
+    }
+}
+
+/* ---------- MAIL TRACER ---------- */
+async function scanMail() {
+    const email = document.getElementById('mail-input').value.trim();
+    if (!email) return;
+    document.getElementById('mail-status').textContent = 'TRACING MAIL INFRASTRUCTURE...';
+    document.getElementById('mail-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">QUERYING DNS · GRAVATAR · DMARC...</div>';
+    try {
+        const res = await fetch('/api/mailtracer', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('mail-status').textContent = data.error; document.getElementById('mail-results').innerHTML = ''; return; }
+        const level = data.trust_score >= 80 ? 'verified' : data.trust_score >= 60 ? 'low' : data.trust_score >= 40 ? 'medium' : 'critical';
+        const es = data.email_security || {};
+        document.getElementById('mail-results').innerHTML = `
+        <div class="result-card">
+            <div class="spread" style="margin-bottom:12px;">
+                <h3 class="card-title h-cyan">${data.email}</h3>
+                <span class="status-badge ${level}">${data.trust_level} · ${data.trust_score}/100</span>
+            </div>
+            <div class="score-shell" style="margin-bottom:14px;">
+                <div class="score-meta"><span>TRUST SCORE</span><strong>${data.trust_score}/100</strong></div>
+                <div class="score-bar"><div class="score-fill" style="width:${data.trust_score}%; background:var(--grad-ok);"></div></div>
+            </div>
+            <div class="row" style="gap:6px; margin-bottom:12px;">
+                <span class="tag ${data.flags.deliverable ? 'ok' : 'hot'}">${data.flags.deliverable ? 'DELIVERABLE' : 'NO MX'}</span>
+                ${data.flags.disposable ? '<span class="tag hot">DISPOSABLE</span>' : ''}
+                ${data.flags.role_based ? '<span class="tag warn">ROLE-BASED</span>' : ''}
+                ${data.flags.free_provider ? '<span class="tag">FREE PROVIDER</span>' : ''}
+            </div>
+            <div class="row" style="gap:6px; margin-bottom:14px;">
+                <span class="status-badge ${gradeBadgeClass(es.spf && es.spf.grade)}">SPF · ${es.spf && es.spf.grade || 'F'}</span>
+                <span class="status-badge ${gradeBadgeClass(es.dmarc && es.dmarc.grade)}">DMARC · ${es.dmarc && es.dmarc.grade || 'F'}</span>
+            </div>
+            ${data.gravatar && data.gravatar.exists ? `<div class="row" style="margin-bottom:12px; align-items:center;">
+                <img src="${data.gravatar.url}" style="width:64px; height:64px; border-radius:50%; border:1px solid var(--cyan);">
+                <span class="dim mono">Gravatar identity bound</span>
+            </div>` : ''}
+            <div>
+                <h4 class="mono dim" style="margin:0 0 6px;">MX RECORDS</h4>
+                ${(data.mx || []).map(m => `<span class="tag">${m}</span>`).join('') || '<span class="tag hot">none</span>'}
+            </div>
+            <div style="margin-top:14px;">
+                <h4 class="mono dim" style="margin:0 0 6px;">SIGNAL FACTORS</h4>
+                ${data.factors.map(f => `<div class="dim mono" style="font-size:0.78rem;">• ${f}</div>`).join('')}
+            </div>
+        </div>`;
+        document.getElementById('mail-status').textContent = 'TRACE COMPLETE.';
+        refreshFX(document.getElementById('mail-results'));
+    } catch (e) {
+        document.getElementById('mail-status').textContent = 'MAIL TRACER FAILED.';
+    }
+}
+
+/* ---------- CODE HUNTER ---------- */
+async function scanCode() {
+    const username = document.getElementById('code-input').value.trim();
+    if (!username) return;
+    document.getElementById('code-status').textContent = 'PROBING GITHUB...';
+    document.getElementById('code-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">QUERYING GITHUB API...</div>';
+    try {
+        const res = await fetch('/api/codehunter', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('code-status').textContent = data.error; document.getElementById('code-results').innerHTML = ''; return; }
+
+        const maxLang = Math.max(1, ...(data.languages || []).map(l => l.count));
+        const maxHour = Math.max(1, ...(data.activity?.hourly_utc || [1]));
+
+        document.getElementById('code-results').innerHTML = `
+        <div class="result-card">
+            <div class="row" style="align-items:flex-start; gap:16px;">
+                <img src="${data.avatar}" style="width:96px; height:96px; border-radius:50%; border:2px solid var(--cyan); box-shadow:0 0 20px rgba(0,240,255,0.5);">
+                <div style="flex:1;">
+                    <div class="spread" style="margin-bottom:6px;">
+                        <h3 class="card-title h-cyan">${data.name || data.login} · <span class="dim">@${data.login}</span></h3>
+                        <span class="status-badge verified">INFLUENCE ${data.influence_score}</span>
+                    </div>
+                    <div class="dim" style="font-size:0.86rem; margin-bottom:8px;">${data.bio || ''}</div>
+                    <div class="row" style="gap:6px; flex-wrap:wrap;">
+                        ${data.company ? `<span class="tag">🏢 ${data.company}</span>` : ''}
+                        ${data.location ? `<span class="tag">📍 ${data.location}</span>` : ''}
+                        ${data.blog ? `<span class="tag">🔗 <a href="${data.blog}" target="_blank" style="color:inherit; text-decoration:none;">${data.blog}</a></span>` : ''}
+                        ${data.twitter ? `<span class="tag">🐦 ${data.twitter}</span>` : ''}
+                        ${data.email_public ? `<span class="tag hot">📧 ${data.email_public}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:14px; gap:18px; flex-wrap:wrap;">
+                <div><div class="dim mono" style="font-size:0.7rem;">FOLLOWERS</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.followers}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">FOLLOWING</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.following}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">REPOS</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.public_repos}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">⭐ STARS</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.total_stars}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">GISTS</div><div style="font-size:1.4rem; font-family:var(--font-display);">${data.gist_count}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">CREATED</div><div class="mono" style="font-size:0.86rem;">${(data.created_at || '').split('T')[0]}</div></div>
+            </div>
+        </div>
+
+        ${(data.commit_emails && data.commit_emails.length) ? `
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title h-red">COMMIT EMAILS HARVESTED · ${data.commit_emails.length}</h3>
+            ${data.commit_emails.map(e => `<div class="row" style="justify-content:space-between; padding:4px 0;"><span class="mono">${e.email}</span><span class="tag hot">${e.count}×</span></div>`).join('')}
+        </div>` : ''}
+
+        <div class="results" style="grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px;">
+            <div class="result-card">
+                <h3 class="card-title">LANGUAGES</h3>
+                ${(data.languages || []).map(l => `
+                    <div style="margin-bottom:6px;">
+                        <div class="row" style="justify-content:space-between; font-size:0.78rem;"><span>${l.name}</span><span class="dim mono">${l.count}</span></div>
+                        <div class="mini-bar"><div style="width:${(l.count / maxLang) * 100}%;"></div></div>
+                    </div>`).join('') || '<div class="dim">No languages</div>'}
+            </div>
+            <div class="result-card">
+                <h3 class="card-title">ACTIVITY · HOURLY (UTC)</h3>
+                <div class="row" style="gap:2px; align-items:flex-end; height:80px; margin-bottom:6px;">
+                    ${(data.activity?.hourly_utc || []).map(h => `<div style="flex:1; background:var(--grad-cool); height:${(h / maxHour) * 100}%; min-height:2px; border-radius:2px;" title="${h} events"></div>`).join('')}
+                </div>
+                <div class="row dim mono" style="font-size:0.66rem; justify-content:space-between;"><span>00h</span><span>12h</span><span>23h</span></div>
+            </div>
+        </div>
+
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">TOP REPOSITORIES</h3>
+            <div class="results" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:10px;">
+                ${(data.top_repos || []).map(r => `
+                <div class="result-card" style="border-color:rgba(0,240,255,0.25);">
+                    <div class="spread" style="margin-bottom:6px;">
+                        <a href="${r.url}" target="_blank" class="card-url" style="margin:0;">${r.name}</a>
+                        <span class="tag">⭐ ${r.stars}</span>
+                    </div>
+                    <div class="dim" style="font-size:0.78rem; margin-bottom:6px;">${r.description || ''}</div>
+                    <div class="row" style="gap:6px;">${r.language ? `<span class="tag">${r.language}</span>` : ''}${r.fork ? '<span class="tag warn">FORK</span>' : ''}</div>
+                </div>`).join('')}
+            </div>
+        </div>
+
+        ${(data.orgs && data.orgs.length) ? `
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">ORGANIZATIONS</h3>
+            <div>${data.orgs.map(o => `<span class="tag">${o.login}</span>`).join('')}</div>
+        </div>` : ''}
+        `;
+        document.getElementById('code-status').textContent = 'HUNT COMPLETE.';
+        refreshFX(document.getElementById('code-results'));
+    } catch (e) {
+        document.getElementById('code-status').textContent = 'GITHUB QUERY FAILED.';
+    }
+}
+
+/* ---------- WAYBACK SPECTRE ---------- */
+async function scanWayback() {
+    const target = document.getElementById('wayback-input').value.trim();
+    if (!target) return;
+    document.getElementById('wayback-status').textContent = 'SUMMONING WAYBACK MACHINE...';
+    document.getElementById('wayback-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">TRAVERSING ARCHIVED TIMELINE...</div>';
+    try {
+        const res = await fetch('/api/wayback', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ target })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('wayback-status').textContent = data.error; document.getElementById('wayback-results').innerHTML = ''; return; }
+        if (!data.total_snapshots) {
+            document.getElementById('wayback-results').innerHTML = `<div class="result-card" style="text-align:center;"><h3 class="card-title dim">NO SNAPSHOTS</h3><div class="dim">${data.message || 'Wayback Machine has no records.'}</div></div>`;
+            document.getElementById('wayback-status').textContent = 'TIMELINE EMPTY.';
+            return;
+        }
+        const maxY = Math.max(...data.yearly.map(y => y.count), 1);
+
+        document.getElementById('wayback-results').innerHTML = `
+        <div class="result-card">
+            <div class="spread" style="margin-bottom:12px;">
+                <h3 class="card-title h-cyan">${data.target}</h3>
+                <span class="status-badge info">${data.total_snapshots.toLocaleString()} SNAPSHOTS</span>
+            </div>
+            <div class="row" style="gap:18px; flex-wrap:wrap;">
+                <div><div class="dim mono" style="font-size:0.7rem;">FIRST SEEN</div><div class="mono">${data.first_seen}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">LAST SEEN</div><div class="mono">${data.last_seen}</div></div>
+                <div><div class="dim mono" style="font-size:0.7rem;">SENSITIVE PATHS</div><div class="mono h-red" style="font-size:1.2rem;">${data.sensitive_count}</div></div>
+            </div>
+        </div>
+
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">YEARLY DISTRIBUTION</h3>
+            <div class="row" style="gap:4px; align-items:flex-end; height:120px; margin-bottom:6px;">
+                ${data.yearly.map(y => `<div style="flex:1; background:var(--grad-cool); height:${(y.count / maxY) * 100}%; min-height:3px; border-radius:3px;" title="${y.year}: ${y.count}"></div>`).join('')}
+            </div>
+            <div class="row dim mono" style="font-size:0.66rem; justify-content:space-between;">
+                <span>${data.yearly[0].year}</span><span>${data.yearly[data.yearly.length - 1].year}</span>
+            </div>
+        </div>
+
+        ${data.sensitive.length ? `
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title h-red">⚠ SENSITIVE PATHS DISCOVERED · ${data.sensitive.length}</h3>
+            ${data.sensitive.map(s => `
+                <div class="row" style="justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04);">
+                    <div style="flex:1;">
+                        <span class="tag hot">${s.pattern}</span>
+                        <a href="${s.snapshot}" target="_blank" class="card-url" style="margin:4px 0;">${s.url}</a>
+                    </div>
+                    <span class="dim mono" style="font-size:0.74rem;">${s.timestamp}</span>
+                </div>`).join('')}
+        </div>` : ''}
+
+        <div class="result-card" style="margin-top:14px;">
+            <h3 class="card-title">SAMPLE SNAPSHOTS · ${data.sample.length}</h3>
+            ${data.sample.slice(0, 25).map(s => `
+                <div class="row" style="justify-content:space-between; padding:4px 0; font-size:0.78rem;">
+                    <a href="${s.snapshot}" target="_blank" class="card-url" style="margin:0; flex:1;">${s.url}</a>
+                    <span class="dim mono" style="font-size:0.72rem;">${s.timestamp}</span>
+                </div>`).join('')}
+        </div>`;
+        document.getElementById('wayback-status').textContent = `TIMELINE TRAVERSED · ${data.total_snapshots} CAPTURES.`;
+        refreshFX(document.getElementById('wayback-results'));
+    } catch (e) {
+        document.getElementById('wayback-status').textContent = 'TIME-MACHINE OFFLINE.';
+    }
+}
+
+/* ---------- PASTE DRAGNET ---------- */
+async function scanPaste() {
+    const query = document.getElementById('paste-input').value.trim();
+    if (!query) return;
+    document.getElementById('paste-status').textContent = 'DEPLOYING DRAGNET ACROSS PASTE NETWORKS...';
+    document.getElementById('paste-results').innerHTML = '<div class="mono h-cyan" style="text-align:center; padding:40px;">SCRAPING DUMP SITES...</div>';
+    document.getElementById('paste-summary').innerHTML = '';
+    try {
+        const res = await fetch('/api/paste', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('paste-status').textContent = data.error; document.getElementById('paste-results').innerHTML = ''; return; }
+        const sites = Object.entries(data.per_site || {});
+        document.getElementById('paste-summary').innerHTML = `
+        <div class="result-card" style="margin-bottom:14px;">
+            <h3 class="card-title">DRAGNET REPORT · ${data.total_hits} TOTAL HITS</h3>
+            <div class="row" style="gap:6px; flex-wrap:wrap; margin-top:8px;">
+                ${sites.map(([site, count]) => `<span class="tag ${count > 0 ? 'hot' : ''}">${site}: ${count}</span>`).join('')}
+            </div>
+        </div>`;
+        if (!data.results.length) {
+            document.getElementById('paste-results').innerHTML = '<div class="result-card" style="text-align:center;"><h3 class="card-title dim">CLEAN</h3><div class="dim">No paste-site references found.</div></div>';
+        } else {
+            document.getElementById('paste-results').innerHTML = data.results.map(r => `
+            <div class="result-card">
+                <div class="spread" style="margin-bottom:8px;">
+                    <h3 class="card-title">${r.title || '(no title)'}</h3>
+                    <span class="status-badge ${r.severity === 'CRITICAL' ? 'critical' : 'low'}">${r.severity}</span>
+                </div>
+                <div class="row" style="gap:6px; margin-bottom:6px;"><span class="tag">${r.site}</span></div>
+                <div class="dim" style="font-size:0.84rem; margin-bottom:8px;">${r.snippet || ''}</div>
+                <a href="${r.url}" target="_blank" class="card-url">${r.url}</a>
+            </div>`).join('');
+        }
+        document.getElementById('paste-status').textContent = `DRAGNET COMPLETE · ${data.total_hits} HITS.`;
+        refreshFX(document.getElementById('paste-results'));
+    } catch (e) {
+        document.getElementById('paste-status').textContent = 'DRAGNET FAILED.';
+    }
+}
+
+/* ---------- AI ANALYST ---------- */
+async function runAnalyst() {
+    const target = document.getElementById('analyst-input').value.trim();
+    const mode = document.getElementById('analyst-mode').value;
+    if (!target) return;
+    document.getElementById('analyst-status').textContent = 'ORCHESTRATING MODULES — THIS MAY TAKE 30-60s...';
+    document.getElementById('analyst-summary').classList.add('hide');
+    document.getElementById('analyst-findings').classList.add('hide');
+    document.getElementById('analyst-modules').classList.add('hide');
+    try {
+        const res = await fetch('/api/analyst', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ target, mode })
+        });
+        const data = await res.json();
+        if (data.error) { document.getElementById('analyst-status').textContent = data.error; return; }
+
+        const verdictClass = data.verdict === 'CRITICAL' ? 'critical' : data.verdict === 'HIGH' ? 'high' : data.verdict === 'MODERATE' ? 'medium' : 'low';
+
+        const summary = document.getElementById('analyst-summary');
+        summary.classList.remove('hide');
+        summary.innerHTML = `
+        <div class="hud-panel reveal" style="margin-top:14px;">
+            <span class="bracket tl"></span><span class="bracket tr"></span>
+            <span class="bracket bl"></span><span class="bracket br"></span>
+            <div class="spread" style="margin-bottom:12px;">
+                <div>
+                    <div class="panel-title" style="margin:0;">UNIFIED THREAT PROFILE</div>
+                    <div class="dim mono" style="font-size:0.74rem; margin-top:6px;">${data.target} · detected as <span class="h-cyan">${data.detected_type}</span></div>
+                </div>
+                <span class="status-badge ${verdictClass}" style="font-size:0.78rem; padding:6px 14px;">${data.verdict} · ${data.risk_score}/100</span>
+            </div>
+            <div class="score-shell">
+                <div class="score-meta"><span>AGGREGATE RISK</span><strong>${data.risk_score}/100</strong></div>
+                <div class="score-bar"><div class="score-fill" style="width:${data.risk_score}%;"></div></div>
+            </div>
+            <div class="row" style="gap:6px; margin-top:12px; flex-wrap:wrap;">
+                ${(data.modules_run || []).map(m => `<span class="tag ok">✓ ${m}</span>`).join('')}
+            </div>
+        </div>`;
+
+        const findings = document.getElementById('analyst-findings');
+        findings.classList.remove('hide');
+        findings.innerHTML = `
+        <div class="hud-panel reveal" style="margin-top:14px;">
+            <div class="panel-title">SIGNAL FINDINGS</div>
+            ${(data.findings || []).map((f, i) => `<div class="result-card" style="margin-bottom:8px;"><div class="row" style="gap:10px;"><span class="tag">${String(i + 1).padStart(2, '0')}</span><span>${f}</span></div></div>`).join('')}
+        </div>`;
+
+        const modules = document.getElementById('analyst-modules');
+        modules.classList.remove('hide');
+        modules.innerHTML = `
+        <div class="hud-panel reveal" style="margin-top:14px;">
+            <div class="panel-title">MODULE PAYLOADS (RAW)</div>
+            ${Object.entries(data.raw || {}).map(([name, payload]) => `
+                <details class="result-card" style="margin-bottom:8px;">
+                    <summary class="card-title" style="cursor:pointer;">${name} ${payload && payload.error ? '<span class="status-badge critical" style="margin-left:8px;">ERROR</span>' : '<span class="status-badge verified" style="margin-left:8px;">OK</span>'}</summary>
+                    <pre class="mono dim" style="margin-top:10px; max-height:300px; overflow:auto; font-size:0.72rem; padding:10px; background:rgba(0,0,0,0.4); border-radius:6px;">${JSON.stringify(payload, null, 2)}</pre>
+                </details>`).join('')}
+        </div>`;
+        document.getElementById('analyst-status').textContent = `SYNTHESIS COMPLETE · ${data.verdict}`;
+        refreshFX(summary); refreshFX(findings); refreshFX(modules);
+    } catch (e) {
+        console.error(e);
+        document.getElementById('analyst-status').textContent = 'ANALYST OFFLINE.';
+    }
+}
+
+</script>
+</body>
+</html>
