@@ -48,6 +48,29 @@
 </div>
 
 ---
+---
+
+> [!IMPORTANT]
+> ### ⚡ ANNOUNCEMENT & PROJECT UPDATE FROM THE ARCHITECT
+> 
+> **Notice regarding The Big Brother Engine V5.0 Unreleased Edition:**
+> 
+> Please be aware that there is an **exclusive, unreleased private version** of The Big Brother OSINT engine that is significantly more powerful than the open-source release. Because this unreleased suite relies on private breach databases, specialized servers, and proprietary premium APIs, it cannot be open-sourced directly.
+> 
+> 🌐 **NEED DEEP INVESTIGATIVE INTEL ON A PERSON, COMPANY, OR GROUP?**
+> 
+> For anyone looking to perform deep-vector reconnaissance on an individual name, phone number, email, company, or target group — **our live surveillance portal is UP AND RUNNING!** 
+> 
+> Our team will execute the deep reconnaissance scan using our unreleased God-EYE Enterprise framework and provide you with a full, confidential PDF intelligence dossier report containing all requested information at the best price available.
+> 
+> 👉 **[ACCESS LIVE OSINT PORTAL & SUBMIT RECON FORMULA](https://thebigbrother.cloud)**
+> 
+> *Thank you all for your support!*
+> 
+> *— `chadi0x` walking out... 🎬 [Dramatic Music Plays]* 🕶️
+
+---
+
 
 ## ⟦ OVERVIEW ⟧
 
